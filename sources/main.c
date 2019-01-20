@@ -1,7 +1,9 @@
+#include <string.h>
+
 int main() {
-	unsigned char * dst = (unsigned char *)0x4000;
-	unsigned n = 0x800;
-	while(n--)
-		*dst+= 0xaa;
+	memset((unsigned char *)0x4000, 0x1, 0x1800);
+	memset((unsigned char *)0x5800, 0x07, 0x300);
+
+	while(1);
 	return 0;
 }
