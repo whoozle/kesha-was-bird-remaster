@@ -1,0 +1,20 @@
+TOP_DIR=..
+SRC_DIR=$(TOP_DIR)/sources
+SOURCES=main.c
+OBJECTS=$(SOURCES:.c=.rel)
+CC=sdcc
+CFLAGS=-mz80
+LFLAGS=--code-loc 0x8000 --data-loc 0xc000
+
+.PHONY=deps
+
+
+%.rel: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -c -o $@ $^
+
+deps: $(TOP_DIR)/Makefile.build
+
+all: game.ihx
+
+game.ihx: $(OBJECTS) deps
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $(OBJECTS)
