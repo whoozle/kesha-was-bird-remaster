@@ -97,6 +97,7 @@ header.append("#define TEXTURE_%s_H" %args.name.upper())
 header.append('')
 header.append("extern const unsigned char %s_data[];" %(args.name))
 header.append("#define %s_ATTRS_OFFSET (%d)" %(args.name.upper(), len(data)))
+header.append("#define %s_ATTRS_SIZE (%d)" %(args.name.upper(), len(attrs)))
 
 if args.compress:
 	packed_data = bytearray()
@@ -107,6 +108,8 @@ if args.compress:
 		compressed_data = huffman(packed_data)
 
 	header.append("//compressed size: %d of %d\n" %(len(compressed_data), len(packed_data)))
+	header.append("#define %s_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
+	header.append("#define %s_SIZE (%d)" %(args.name.upper(), len(data) + len(attrs)))
 	hexdata = ", ".join(map(hex, compressed_data))
 	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
 else:
