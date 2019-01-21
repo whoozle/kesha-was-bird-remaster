@@ -11,14 +11,9 @@
 	.area	_BSEG
 	.area   _BSS
 	.area   _HEAP
-
 	.area   _CODE
-__clock::
-	ld	a,#2
-	rst	0x08
-	ret
-
 	.area   _GSINIT
+
 _gsinit::
 	ld	bc, #l__INITIALIZER
 	ld	a, b
