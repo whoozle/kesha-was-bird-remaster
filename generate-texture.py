@@ -86,9 +86,7 @@ else:
 					if fg == v:
 						set_pixel2x(x, y)
 					elif bg != v:
-						pass
-						#if v & 1:
-						#	set_pixel(x * 2, y * 2)
+						set_pixel(x * 2, y * 2)
 						#	set_pixel(x * 2 + 1, y * 2 + 1)
 						#else:
 						#	set_pixel(x * 2 + 1, y * 2)
