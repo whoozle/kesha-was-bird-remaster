@@ -20,4 +20,4 @@ generate_texture(splash ${CMAKE_CURRENT_SOURCE_DIR}/assets/splash.png)
 set(SOURCES sources/main.c sources/init.s)
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
 
-add_custom_command(TARGET kesha POST_BUILD COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ihx-to-sna.py $<TARGET_FILE:kesha> ${CMAKE_CURRENT_BINARY_DIR}/kesha.sna)
+add_custom_command(TARGET kesha POST_BUILD COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ihx-to-z80.py $<TARGET_FILE:kesha> ${CMAKE_CURRENT_BINARY_DIR}/kesha.z80)
