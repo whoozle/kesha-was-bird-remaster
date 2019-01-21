@@ -96,25 +96,31 @@ header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
 header.append("#define TEXTURE_%s_H" %args.name.upper())
 header.append('')
 header.append("extern const unsigned char %s_data[];" %(args.name))
-header.append("#define %s_ATTRS_OFFSET (%d)" %(args.name.upper(), len(data)))
+header.append("extern const unsigned char %s_attrs[];" %(args.name))
+header.append("#define %s_DATA_SIZE (%d)" %(args.name.upper(), len(data)))
 header.append("#define %s_ATTRS_SIZE (%d)" %(args.name.upper(), len(attrs)))
 
 if args.compress:
 	packed_data = bytearray()
 	if args.algorithm == "lz4":
 		from lz4.block import compress
-		compressed_data = bytearray(compress(data + attrs, mode='high_compression', compression=12))
-	elif args.algorithm == "huffman":
-		compressed_data = huffman(packed_data)
+		compressed_data = bytearray(compress(data, mode='high_compression', compression=12))
+		compressed_attrs = bytearray(compress(attrs, mode='high_compression', compression=12))
+	else:
+		raise Exception("unknown compression %s" %args.algorithm)
 
-	header.append("//compressed size: %d of %d\n" %(len(compressed_data), len(packed_data)))
-	header.append("#define %s_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
-	header.append("#define %s_SIZE (%d)" %(args.name.upper(), len(data) + len(attrs)))
+	header.append("//compressed size: %d+%d of %d\n" %(len(compressed_data), len(compressed_attrs), len(packed_data)))
+	header.append("#define %s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
+	header.append("#define %s_ATTRS_CSIZE (%d)" %(args.name.upper(), len(compressed_attrs)))
 	hexdata = ", ".join(map(hex, compressed_data))
 	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
+	hexdata = ", ".join(map(hex, compressed_attrs))
+	source.append("const unsigned char %s_attrs[] = {%s};" %(args.name, hexdata))
 else:
-	hexdata = ", ".join(map(hex, data + attrs))
+	hexdata = ", ".join(map(hex, data))
 	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
+	hexdata = ", ".join(map(hex, attrs))
+	source.append("const unsigned char %s_attrs[] = {%s};" %(args.name, hexdata))
 
 header.append('')
 header.append("#endif")
