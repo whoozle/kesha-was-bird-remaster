@@ -108,5 +108,5 @@ else:
 
 	hexdata = ", ".join(map(hex, data + attrs))
 	#hexattrs = ", ".join(map(hex, attrs))
-	print "unsigned char %s_data[] = {%s};" %(args.name, hexdata)
+	print "const unsigned char %s_data[] = {%s};" %(args.name, hexdata)
 	#print "unsigned char %s_attrs[] = {%s};" %(args.name, hexattrs)
