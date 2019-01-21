@@ -27,3 +27,7 @@ gsinit_next:
 	.area   _GSFINAL
 	ret
 
+_halt::
+1$:
+	halt
+	jr	1$
