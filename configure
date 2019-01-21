@@ -1,0 +1,6 @@
+rm -rf build
+mkdir build
+pushd build
+cmake -DCMAKE_TOOLCHAIN_FILE=../sdcc.toolchain -DCMAKE_C_COMPILER=sdcc ..
+make -j1
+popd
