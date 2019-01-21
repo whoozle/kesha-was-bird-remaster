@@ -7,10 +7,13 @@ set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GENERATED_ROOT})
 set(PALETTE 2 3 5 4)
 
+include_directories(${GENERATED_ROOT})
+
 macro(generate_texture NAME SOURCE)
-	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/_${NAME}.c)
-	add_custom_command(OUTPUT ${GENERATED_ROOT}/_${NAME}.c
-		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${SOURCE} ${NAME} -p ${PALETTE} > ${GENERATED_ROOT}/_${NAME}.c
+	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/texture_${NAME}.c)
+	add_custom_command(OUTPUT ${GENERATED_ROOT}/texture_${NAME}.c ${GENERATED_ROOT}/texture_${NAME}.h
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${SOURCE} ${NAME} -p ${PALETTE}
+		WORKING_DIRECTORY ${GENERATED_ROOT}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${SOURCE}
 	)
 endmacro()

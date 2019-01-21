@@ -91,18 +91,36 @@ for ty in xrange(ny):
 					#	set_pixel(x * 2, y * 2)
 					#	set_pixel(x * 2 + 1, y * 2 + 1)
 
+header, source = [], []
+header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
+header.append("#define TEXTURE_%s_H" %args.name.upper())
+header.append('')
+header.append("extern const unsigned char %s_data[];" %(args.name))
+header.append("#define %s_ATTRS_OFFSET (%d)" %(args.name.upper(), len(data)))
+
 if args.compress:
 	packed_data = bytearray()
 	if args.algorithm == "lz4":
 		from lz4.block import compress
-		compressed_data = bytearray(compress(packed_data, mode='high_compression', compression=12))
+		compressed_data = bytearray(compress(data + attrs, mode='high_compression', compression=12))
 	elif args.algorithm == "huffman":
 		compressed_data = huffman(packed_data)
 
-	print "#compressed size: %d of %d\n" %(len(compressed_data), len(packed_data))
-	print " ".join(map(lambda x: "0x%02x" %x, compressed_data))
+	header.append("//compressed size: %d of %d\n" %(len(compressed_data), len(packed_data)))
+	hexdata = ", ".join(map(hex, compressed_data))
+	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
+else:
+	hexdata = ", ".join(map(hex, data + attrs))
+	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
 
-hexdata = ", ".join(map(hex, data))
-hexattrs = ", ".join(map(hex, attrs))
-print "const unsigned char %s_data[] = {%s};" %(args.name, hexdata)
-print "unsigned char %s_attrs[] = {%s};" %(args.name, hexattrs)
+header.append('')
+header.append("#endif")
+
+header.append('')
+source.append('')
+
+with open("texture_%s.h" %args.name, "wt") as f:
+	f.write("\n".join(header))
+
+with open("texture_%s.c" %args.name, "wt") as f:
+	f.write("\n".join(source))
