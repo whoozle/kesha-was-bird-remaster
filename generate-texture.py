@@ -10,17 +10,11 @@ parser.add_argument('source', help='input file')
 parser.add_argument('name', help='name')
 parser.add_argument('--compress', '-c', action='store_true', help='compress bitmap with lz4 algorithm')
 parser.add_argument('--algorithm', '-A', type=str, help='select algo', default='lz4')
-parser.add_argument('--palette', '-p', nargs='+', help='palette')
 args = parser.parse_args()
 
 tex = png.Reader(args.source)
 w, h, pixels, metadata = tex.read_flat()
-tw, th = 4, 4
-nx = (w + tw - 1) / tw
-ny = (h + th - 1) / th
-data = bytearray([0] * (tw * th * nx * ny * 4 / 8))
-attrs = bytearray([0] * (nx * ny))
-palette = map(int, args.palette)
+data = bytearray([0] * (w * h))
 
 def get_pixel(x, y):
 	if x < 0 or x >= w:
@@ -38,92 +32,33 @@ def set_pixel(x, y):
 	addr = (((y2 << 6) | (y0 << 3) | y1) << 5) | x
 	data[addr] |= 0x80 >> bit
 
-def set_pixel2x(x, y):
-	set_pixel(x * 2, y * 2)
-	set_pixel(x * 2 + 1, y * 2)
-	set_pixel(x * 2, y * 2 + 1)
-	set_pixel(x * 2 + 1, y * 2 + 1)
-
-for ty in xrange(ny):
-	basey = ty * th
-	for tx in xrange(nx):
-		basex = tx * tw
-		stats = {}
-		for y in xrange(th):
-			for x in xrange(tw):
-				v = get_pixel(basex + x, basey + y)
-				stats[v] = stats.setdefault(v, 0) + 1
-		stats = stats.items()
-		stats.sort(key=operator.itemgetter(1), reverse=True)
-		stats = stats[:2]
-		if len(stats) >= 3:
-			bg, fg, fg2 = stats[0][0], stats[1][0], stats[2][0]
-			attr = (palette[bg] << 3) | palette[fg]
-		elif len(stats) == 2:
-			bg, fg, fg2 = stats[0][0], stats[1][0], 99
-			attr = (palette[bg] << 3) | palette[fg]
-		else:
-			bg, fg, fg2 = stats[0][0], 99, 99
-			attr = (palette[bg] << 3)
-
-		attrs[ty * nx + tx] = attr
-
-		for yb in xrange(th):
-			y = basey + yb
-			for xb in xrange(tw):
-				x = basex + xb
-				v = get_pixel(x, y)
-				if fg == v or fg2 == v:
-					set_pixel2x(x, y)
-				elif bg != v:
-					set_pixel(x * 2, y * 2)
-					#	set_pixel(x * 2 + 1, y * 2 + 1)
-					#else:
-					#	set_pixel(x * 2 + 1, y * 2)
-					#	set_pixel(x * 2, y * 2 + 1)
-					#if random.randint(0, 1) == 0:
-					#	set_pixel(x * 2, y * 2)
-					#if random.randint(0, 1) == 0:
-					#	set_pixel(x * 2, y * 2 + 1)
-					#if random.randint(0, 1) == 0:
-					#	set_pixel(x * 2 + 1, y * 2)
-					#if random.randint(0, 1) == 0:
-					#	set_pixel(x * 2 + 1, y * 2 + 1)
-					#if v & 1:
-					#	set_pixel2x(x, y)
-					#	set_pixel(x * 2, y * 2)
-					#	set_pixel(x * 2 + 1, y * 2 + 1)
+for y in xrange(h):
+	for x in xrange(w):
+		v = get_pixel(x, y)
+		data[y * w + x] = v
 
 header, source = [], []
 header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
 header.append("#define TEXTURE_%s_H" %args.name.upper())
 header.append('')
 header.append("extern const unsigned char %s_data[];" %(args.name))
-header.append("extern const unsigned char %s_attrs[];" %(args.name))
 header.append("#define %s_DATA_SIZE (%d)" %(args.name.upper(), len(data)))
-header.append("#define %s_ATTRS_SIZE (%d)" %(args.name.upper(), len(attrs)))
 
 if args.compress:
 	packed_data = bytearray()
 	if args.algorithm == "lz4":
 		from lz4.block import compress
 		compressed_data = bytearray(compress(data, mode='high_compression', compression=12))
-		compressed_attrs = bytearray(compress(attrs, mode='high_compression', compression=12))
 	else:
 		raise Exception("unknown compression %s" %args.algorithm)
 
-	header.append("//compressed size: %d+%d of %d\n" %(len(compressed_data), len(compressed_attrs), len(packed_data)))
+	header.append("//compressed size: %d of %d\n" %(len(compressed_data), len(packed_data)))
 	header.append("#define %s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
-	header.append("#define %s_ATTRS_CSIZE (%d)" %(args.name.upper(), len(compressed_attrs)))
 	hexdata = ", ".join(map(hex, compressed_data))
 	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
-	hexdata = ", ".join(map(hex, compressed_attrs))
-	source.append("const unsigned char %s_attrs[] = {%s};" %(args.name, hexdata))
 else:
 	hexdata = ", ".join(map(hex, data))
 	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
-	hexdata = ", ".join(map(hex, attrs))
-	source.append("const unsigned char %s_attrs[] = {%s};" %(args.name, hexdata))
 
 header.append('')
 header.append("#endif")

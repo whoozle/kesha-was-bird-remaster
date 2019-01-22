@@ -13,7 +13,7 @@ include_directories(${GENERATED_ROOT})
 macro(generate_texture NAME SOURCE)
 	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/texture_${NAME}.c)
 	add_custom_command(OUTPUT ${GENERATED_ROOT}/texture_${NAME}.c ${GENERATED_ROOT}/texture_${NAME}.h
-		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py -c ${SOURCE} ${NAME} -p ${PALETTE}
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py -c ${SOURCE} ${NAME}
 		WORKING_DIRECTORY ${GENERATED_ROOT}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${SOURCE}
 	)

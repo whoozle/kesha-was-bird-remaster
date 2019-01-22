@@ -7,7 +7,7 @@ void main() {
 	gsinit();
 
 	lz4_unpack((unsigned char *)0x4000, splash_data);
-	lz4_unpack((unsigned char *)0x5800, splash_attrs);
+	memset((unsigned char *)0x5800, 7, 0x300);
 
 	halt();
 }
