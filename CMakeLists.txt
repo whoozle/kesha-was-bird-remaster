@@ -1,11 +1,12 @@
 project(kesha C ASM)
 cmake_minimum_required(VERSION 3.13)
 
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --opt-code-speed")
 set(CMAKE_EXE_LINKER_FLAGS "--code-loc 0x8000 --data-loc 0xc000")
 
 set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GENERATED_ROOT})
-set(PALETTE 2 3 5 4)
+set(PALETTE 1 6 2 7)
 
 include_directories(${GENERATED_ROOT})
 
