@@ -47,14 +47,13 @@ header.append("extern const unsigned char %s_data[];" %(args.name))
 header.append("#define %s_DATA_SIZE (%d)" %(args.name.upper(), len(data)))
 
 if args.compress:
-	packed_data = bytearray()
 	if args.algorithm == "lz4":
 		from lz4.block import compress
 		compressed_data = bytearray(compress(data, mode='high_compression', compression=12))
 	else:
 		raise Exception("unknown compression %s" %args.algorithm)
 
-	header.append("//compressed size: %d of %d\n" %(len(compressed_data), len(packed_data)))
+	header.append("//compressed size: %d of %d\n" %(len(compressed_data), len(data)))
 	header.append("#define %s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
 	hexdata = ", ".join(map(hex, compressed_data))
 	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
