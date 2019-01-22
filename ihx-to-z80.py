@@ -13,7 +13,7 @@ TYPE_START_LA	= 0x05
 RAM_START	= 0x4000
 RAM_SIZE	= 0xc000
 
-PC			= 0x8000
+PC			= 0x6000
 
 class Image(object):
 	def __init__(self):
