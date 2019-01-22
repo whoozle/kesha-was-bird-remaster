@@ -15,12 +15,12 @@ args = parser.parse_args()
 
 tex = png.Reader(args.source)
 w, h, pixels, metadata = tex.read_flat()
-w = (w + 7) // 8 * 8
+w = ((w + 7) >> 3) << 3
 
 tw, th = 4, 4
 nx = (w + tw - 1) // tw
 ny = (h + th - 1) // th
-data = bytearray([0] * (tw * th * nx * ny // 8))
+data = bytearray([0] * ((tw * th * nx * ny) >> 3))
 attrs = bytearray([0] * (nx * ny))
 palette = map(int, args.palette)
 
@@ -33,9 +33,9 @@ def get_pixel(x, y):
 	return pixels[y * w + x]
 
 def set_pixel(x, y):
-	assert y < 128
+	assert y < 64
 	bit = x & 7
-	addr = (y * w >> 3) + (x >> 3)
+	addr = (y * (w >> 3)) + (x >> 3)
 	data[addr] |= 0x80 >> bit
 
 for ty in xrange(ny):
@@ -43,9 +43,11 @@ for ty in xrange(ny):
 	for tx in xrange(nx):
 		basex = tx * tw
 		stats = {}
-		for y in xrange(th):
-			for x in xrange(tw):
-				v = get_pixel(basex + x, basey + y)
+		for yb in xrange(th):
+			y = basey + yb
+			for xb in xrange(tw):
+				x = basex + xb
+				v = get_pixel(x, y)
 				stats[v] = stats.setdefault(v, 0) + 1
 		stats = stats.items()
 		stats.sort(key=operator.itemgetter(1), reverse=True)

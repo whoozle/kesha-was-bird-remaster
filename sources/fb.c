@@ -1,7 +1,28 @@
 #include "fb.h"
 #include <string.h>
 
-u8 fb[128 * 64 / 4];
+u8 fbData[128 * 64 / 4];
+u8 fbAttr[32 * 16];
+
+static u8 dup4[16] =
+{
+	0x00, //0000
+	0x03, //0001
+	0x0c, //0010
+	0x0f, //0011
+	0x30, //0100
+	0x33, //0101
+	0x3c, //0110
+	0x3f, //0111
+	0xc0, //1000
+	0xc3, //1001
+	0xcc, //1010
+	0xcf, //1011
+	0xf0, //1100
+	0xf3, //1101
+	0xfc, //1110
+	0xff, //1111
+};
 
 //clears X, increment line number
 static u16 fb_next_line(u16 ptr)
@@ -19,7 +40,7 @@ static u16 fb_next_line(u16 ptr)
 
 void fb_update(void) {
 	u8 *dstBase = (u8 *)0x4080;
-	const u8 *src = fb;
+	const u8 *src = fbData;
 	u8 lines = 64;
 	while(lines--)
 	{
@@ -28,21 +49,12 @@ void fb_update(void) {
 		while(width--)
 		{
 			u8 srcByte = *src++;
-			// for(u8 b = 4; b--; )
-			// {
-			// 	u8 v = (srcByte >> (b << 1)) & 3;
-
-			// }
-			*dst++ = srcByte;
+			*dst++ = dup4[srcByte >> 4];
+			*dst++ = dup4[srcByte & 0x0f];
 		}
 		u8 * next = (u8*)fb_next_line((u16)dstBase);
 		memcpy(next, dstBase, 32);
 		dstBase = (u8*)fb_next_line((u16)next);
-
-		// u8 byteWidth = 32;
-		// while(byteWidth--)
-		// {
-
-		// }
 	}
+	memcpy(0x5880, fbAttr, 32 * 16);
 }
