@@ -56,11 +56,14 @@ for ty in xrange(ny):
 		stats = stats.items()
 		stats.sort(key=operator.itemgetter(1), reverse=True)
 		stats = stats[:2]
-		if len(stats) >= 2:
-			bg, fg = stats[0][0], stats[1][0]
+		if len(stats) >= 3:
+			bg, fg, fg2 = stats[0][0], stats[1][0], stats[2][0]
+			attr = (palette[bg] << 3) | palette[fg]
+		elif len(stats) == 2:
+			bg, fg, fg2 = stats[0][0], stats[1][0], 99
 			attr = (palette[bg] << 3) | palette[fg]
 		else:
-			bg, fg = stats[0][0], 99
+			bg, fg, fg2 = stats[0][0], 99, 99
 			attr = (palette[bg] << 3)
 
 		attrs[ty * nx + tx] = attr
@@ -70,7 +73,7 @@ for ty in xrange(ny):
 			for xb in xrange(tw):
 				x = basex + xb
 				v = get_pixel(x, y)
-				if fg == v:
+				if fg == v or fg2 == v:
 					set_pixel2x(x, y)
 				elif bg != v:
 					set_pixel(x * 2, y * 2)
