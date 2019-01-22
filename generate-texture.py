@@ -37,7 +37,7 @@ for y in xrange(h):
 	for x in xrange(0, w, 4):
 		for dx in xrange(4):
 			v = get_pixel(x + dx, y)
-			data[y * w / 4 + x / 4] |= (v << (2 * (3 - dx)))
+			data[y * w // 4 + x // 4] |= (v << (2 * (3 - dx)))
 
 header, source = [], []
 header.append("#ifndef TEXTURE_%s_H" %args.name.upper())

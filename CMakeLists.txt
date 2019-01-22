@@ -2,7 +2,7 @@ project(kesha C ASM)
 cmake_minimum_required(VERSION 3.13)
 
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --opt-code-speed")
-set(CMAKE_EXE_LINKER_FLAGS "--code-loc 0x6000 --data-loc 0xf000 --no-xinit-opt")
+set(CMAKE_EXE_LINKER_FLAGS "--code-loc 0x6000 --data-loc 0xf000 --no-xinit-opt --opt-code-speed --peep-asm --peep-return")
 
 set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GENERATED_ROOT})
@@ -39,7 +39,13 @@ generate_texture(phone			${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/phone_notep
 generate_texture(prison			${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/prison.png)
 generate_texture(professor		${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/professor.png)
 
-set(SOURCES sources/main.c sources/init.s sources/lz4.c)
+set(SOURCES
+	sources/main.c
+	sources/lz4.c
+	sources/fb.c
+	sources/init.s
+#	sources/fb_fast.s
+)
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
 
 add_custom_command(TARGET kesha POST_BUILD COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ihx-to-z80.py $<TARGET_FILE:kesha> ${CMAKE_CURRENT_BINARY_DIR}/kesha.z80)
