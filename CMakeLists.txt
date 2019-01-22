@@ -6,7 +6,7 @@ set(CMAKE_EXE_LINKER_FLAGS "--code-loc 0x8000 --data-loc 0xc000")
 
 set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GENERATED_ROOT})
-set(PALETTE 1 6 2 7)
+set(PALETTE 0 6 2 7)
 
 include_directories(${GENERATED_ROOT})
 
@@ -19,7 +19,9 @@ macro(generate_texture NAME SOURCE)
 	)
 endmacro()
 
-generate_texture(splash ${CMAKE_CURRENT_SOURCE_DIR}/assets/splash.png)
+#generate_texture(splash ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/professor.png)
+#generate_texture(splash ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/phone_notepad.png)
+generate_texture(splash ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/drinking.png)
 
 set(SOURCES sources/main.c sources/init.s sources/lz4.c)
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
