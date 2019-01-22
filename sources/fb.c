@@ -24,7 +24,7 @@ void fb_update(void) {
 	while(lines--)
 	{
 		u8 *dst = dstBase;
-		u8 width = 32;
+		u8 width = 16;
 		while(width--)
 		{
 			u8 srcByte = *src++;

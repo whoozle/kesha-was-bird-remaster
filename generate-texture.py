@@ -15,11 +15,12 @@ args = parser.parse_args()
 
 tex = png.Reader(args.source)
 w, h, pixels, metadata = tex.read_flat()
+w = (w + 7) // 8 * 8
 
 tw, th = 4, 4
-nx = (w + tw - 1) / tw
-ny = (h + th - 1) / th
-data = bytearray([0] * (tw * th * nx * ny * 4 / 8))
+nx = (w + tw - 1) // tw
+ny = (h + th - 1) // th
+data = bytearray([0] * (tw * th * nx * ny // 8))
 attrs = bytearray([0] * (nx * ny))
 palette = map(int, args.palette)
 
@@ -34,9 +35,7 @@ def get_pixel(x, y):
 def set_pixel(x, y):
 	assert y < 128
 	bit = x & 7
-	x >>= 3
-	y2, y1, y0 = y >> 6, (y >> 3) & 7, y & 7
-	addr = (((y2 << 6) | (y0 << 3) | y1) << 5) | x
+	addr = (y * w >> 3) + (x >> 3)
 	data[addr] |= 0x80 >> bit
 
 for ty in xrange(ny):
@@ -71,7 +70,7 @@ for ty in xrange(ny):
 				if fg == v or fg2 == v:
 					set_pixel(x, y)
 				elif bg != v:
-					set_pixel(x * 2, y * 2)
+					set_pixel(x, y)
 
 header, source = [], []
 header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
