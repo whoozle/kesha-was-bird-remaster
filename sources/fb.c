@@ -4,20 +4,23 @@
 u8 fbData[128 * 64 / 4];
 u8 fbAttr[32 * 16];
 
-static u8 dup4[16] =
+static const u8 dup4[16] =
 {
 	0x00, //0000
 	0x03, //0001
 	0x0c, //0010
 	0x0f, //0011
+
 	0x30, //0100
 	0x33, //0101
 	0x3c, //0110
 	0x3f, //0111
+
 	0xc0, //1000
 	0xc3, //1001
 	0xcc, //1010
 	0xcf, //1011
+
 	0xf0, //1100
 	0xf3, //1101
 	0xfc, //1110
@@ -39,6 +42,7 @@ static u16 fb_next_line(u16 ptr)
 }
 
 void fb_update(void) {
+	memcpy(0x5880, fbAttr, 32 * 16);
 	u8 *dstBase = (u8 *)0x4080;
 	const u8 *src = fbData;
 	u8 lines = 64;
@@ -56,5 +60,4 @@ void fb_update(void) {
 		memcpy(next, dstBase, 32);
 		dstBase = (u8*)fb_next_line((u16)next);
 	}
-	memcpy(0x5880, fbAttr, 32 * 16);
 }
