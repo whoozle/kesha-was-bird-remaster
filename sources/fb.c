@@ -38,7 +38,7 @@ static u16 fb_next_line(u16 ptr)
 	}
 	else
 		y += 8;
-	return 0x4000 | (y << 5);
+	return 0x4000u | (y << 5);
 }
 
 void fb_update(void) {
