@@ -14,7 +14,8 @@ args = parser.parse_args()
 
 tex = png.Reader(args.source)
 w, h, pixels, metadata = tex.read_flat()
-data = bytearray([0] * (w * h))
+w = (w + 3) / 4 * 4
+data = bytearray([0] * (w * h / 4))
 
 def get_pixel(x, y):
 	if x < 0 or x >= w:
@@ -33,9 +34,10 @@ def set_pixel(x, y):
 	data[addr] |= 0x80 >> bit
 
 for y in xrange(h):
-	for x in xrange(w):
-		v = get_pixel(x, y)
-		data[y * w + x] = v
+	for x in xrange(0, w, 4):
+		for dx in xrange(4):
+			v = get_pixel(x + dx, y)
+			data[y * w / 4 + x / 4] |= (v << (2 * (3 - dx)))
 
 header, source = [], []
 header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
