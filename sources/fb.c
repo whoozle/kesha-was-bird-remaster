@@ -43,12 +43,11 @@ static u16 fb_next_line(u16 ptr)
 
 void fb_update(void) {
 	memcpy(0x5880, fbAttr, 32 * 16);
-	u8 *dstBase = (u8 *)0x4080;
+	u8 *dst = (u8 *)0x4080;
 	const u8 *src = fbData;
 	u8 lines = 64;
 	while(lines--)
 	{
-		u8 *dst = dstBase;
 		u8 width = 16;
 		while(width--)
 		{
@@ -56,8 +55,9 @@ void fb_update(void) {
 			*dst++ = dup4[srcByte >> 4];
 			*dst++ = dup4[srcByte & 0x0f];
 		}
-		u8 * next = (u8*)fb_next_line((u16)dstBase);
-		memcpy(next, dstBase, 32);
-		dstBase = (u8*)fb_next_line((u16)next);
+		--dst;
+		u8 * next = (u8*)fb_next_line((u16)dst);
+		memcpy(next, dst - 31, 32);
+		dst = (u8*)fb_next_line((u16)next);
 	}
 }
