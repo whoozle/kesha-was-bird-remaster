@@ -3,10 +3,11 @@
 
 const unsigned char * lz4_unpack(unsigned char *dst, const unsigned char *src)
 {
-	u16 csize = src[0] | (src[1] << 8);
-	src += 4;
-	const unsigned char *end = src + csize;
-	while(src < end) {
+	u16 usize = *src++;
+	usize |= *src++ << 8;
+	src += 2;
+	const unsigned char *end = dst + usize;
+	while(dst < end) {
 		u8 code = *src++;
 		u16 size = code >> 4;
 		if (size != 0)
@@ -29,8 +30,8 @@ const unsigned char * lz4_unpack(unsigned char *dst, const unsigned char *src)
 		u16 offset = *src++;
 		offset |= *src++ << 8;
 
-		size = 2 + (code & 0x0f);
-		if (size == 17)
+		size = 4 + (code & 0x0f);
+		if (size == 19)
 		{
 			u8 next;
 			do
