@@ -19,7 +19,6 @@ macro(generate_texture NAME SOURCE)
 	)
 endmacro()
 
-generate_texture(splash			${CMAKE_CURRENT_SOURCE_DIR}/assets/splash.png)
 generate_texture(drinking		${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/drinking.png)
 generate_texture(earth_1		${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth.png)
 generate_texture(earth_2		${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth_2.png)
