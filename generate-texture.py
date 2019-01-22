@@ -91,7 +91,8 @@ if args.compress:
 	else:
 		raise Exception("unknown compression %s" %args.algorithm)
 
-	header.append("//compressed size: %d+%d of %d+%d\n" %(len(compressed_data), len(compressed_attrs), len(data), len(attrs)))
+	ctotal, total = len(compressed_data) + len(compressed_attrs), len(data) + len(attrs)
+	header.append("//compressed size: %d+%d (%d) of %d+%d (%d) = %d%%\n" %(len(compressed_data), len(compressed_attrs), ctotal, len(data), len(attrs), total, 100 * ctotal // total))
 	header.append("#define %s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
 	header.append("#define %s_ATTRS_CSIZE (%d)" %(args.name.upper(), len(compressed_attrs)))
 	hexdata = ", ".join(map(hex, compressed_data))
