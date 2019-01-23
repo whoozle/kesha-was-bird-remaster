@@ -24,6 +24,16 @@ macro(generate_texture)
 	)
 endmacro()
 
+macro(generate_font)
+	cmake_parse_arguments(_GF "" "NAME;SOURCE" "" ${ARGN})
+	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/font_${_GF_NAME}.c)
+	add_custom_command(OUTPUT ${GENERATED_ROOT}/font_${_GF_NAME}.c ${GENERATED_ROOT}/font_${_GF_NAME}.h
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-font.py ${_GF_SOURCE} ${_GF_NAME} ${GENERATED_ROOT}
+		WORKING_DIRECTORY ${GENERATED_ROOT}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-font.py ${_GF_SOURCE}
+	)
+endmacro()
+
 generate_texture(NAME drinking		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/drinking.png PALETTE 0 1 5 1)
 generate_texture(NAME earth_1		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth.png)
 generate_texture(NAME earth_2		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth_2.png)
@@ -45,6 +55,7 @@ generate_texture(NAME phone			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics
 generate_texture(NAME prison		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/prison.png)
 generate_texture(NAME professor		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/professor.png)
 generate_texture(NAME room			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/room.png PALETTE 7 1 2 0)
+generate_font(NAME font				SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/font/5.font)
 
 set(SOURCES
 	sources/main.c
