@@ -9,7 +9,7 @@ void font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 	y -= glyph->descend;
 	u8 xp = x & 7;
 
-	const u8 * src = glyph->data;
+	const u8 * data = glyph->data;
 	if (xp + w <= 8)
 	{
 		while(h--)
