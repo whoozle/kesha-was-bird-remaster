@@ -31,3 +31,8 @@ _halt::
 1$:
 	halt
 	jr	1$
+
+_border::
+	ld a, #5
+	out (254), a
+	ret
