@@ -9,11 +9,9 @@
 #include "lz4.h"
 #include "fb.h"
 
-extern void border(void);
-
 void main() {
 	gsinit();
-	border();
+	border(5);
 
 	lz4_unpack(fbData, frame_data);
 	memset((unsigned char *)0x5800, 5 << 3, 0x300);

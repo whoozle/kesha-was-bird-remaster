@@ -33,6 +33,8 @@ _halt::
 	jr	1$
 
 _border::
-	ld a, #5
+	ld hl, #2
+	add hl, sp
+	ld a, (hl)
 	out (254), a
 	ret
