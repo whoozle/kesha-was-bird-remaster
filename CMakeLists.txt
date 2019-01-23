@@ -50,6 +50,8 @@ set(SOURCES
 	sources/lz4.c
 	sources/fb.c
 	sources/init.s
+	sources/tiles.c
+	sources/days.c
 #	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
