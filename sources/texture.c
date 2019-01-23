@@ -10,5 +10,4 @@ void texture_draw_fullscreen(const Texture *texture)
 	fb_clear_attrs(texture->background << 3);
 	lz4_unpack(fbData, texture->data);
 	lz4_unpack(fbAttr, texture->attrs);
-	fb_update();
 }
