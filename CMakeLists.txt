@@ -40,7 +40,7 @@ generate_texture(NAME ninja_fish	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_p
 generate_texture(NAME ninja_kesha_1	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/ninja_kills_kesha.png)
 generate_texture(NAME ninja_kesha_2	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/ninja_kills_kesha_2.png)
 generate_texture(NAME ninja_kesha_3	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/ninja_kills_kesha_3.png)
-generate_texture(NAME phone			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/phone_notepad.png)
+generate_texture(NAME phone			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/phone_notepad.png PALETTE 2 1 5 4)
 generate_texture(NAME prison		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/prison.png)
 generate_texture(NAME professor		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/professor.png)
 generate_texture(NAME room			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/room.png PALETTE 7 1 2 0)
