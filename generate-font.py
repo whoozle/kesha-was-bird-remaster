@@ -52,13 +52,13 @@ def generate(name, file, font_height = 5, space_width = 3):
 							value |= (0x80 >> i)
 					glyph_data.append(value)
 
-				index_source += "\t{ %d, %d, %d, { %s } },\n" %(width, height, (256 - descent) & 0xff, ", ".join(["0x%02x" %x for x in glyph_data]))
+				index_source += "\t{ %d, %d, %d, { %s } },\n" %(width, height, descent, ", ".join(["0x%02x" %x for x in glyph_data]))
 				#print key, font[key]
 				glyph += 1
 			else:
 				index_source += "\t{ %d, 0, 0 },\n" %space_width
 	source = '#include "font_%s.h"\n\n' %name
-	source += "Glyph font_%s[%d] =\n{\n" %(name, cmax - cmin + 1)
+	source += "const Glyph font_%s[%d] =\n{\n" %(name, cmax - cmin + 1)
 	source += index_source
 	source += "\n};\n"
 	source += "\n\n"
@@ -73,7 +73,7 @@ def generate(name, file, font_height = 5, space_width = 3):
 #define FONT_{uname}_CMAX ({max})
 #define FONT_{uname}_GLYPHS ({glyphs})
 
-extern Glyph font_{name}[{glyphs}];
+extern const Glyph font_{name}[{glyphs}];
 
 #endif
 """.format(min = cmin, max = cmax, glyphs = (cmax - cmin + 1), name = name, uname=name.upper(), space_width = space_width)
