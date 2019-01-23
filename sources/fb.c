@@ -42,8 +42,8 @@ static u16 fb_next_line(u16 ptr)
 }
 
 void fb_update(void) {
-	memcpy(0x5880, fbAttr, 32 * 16);
-	u8 *dst = (u8 *)0x4080;
+	memcpy(VRAM_ATTRS + 0x80, fbAttr, 32 * 16);
+	u8 *dst = VRAM_ADDR + 0x80;
 	const u8 *src = fbData;
 	u8 lines = 64;
 	while(lines--)
@@ -64,5 +64,5 @@ void fb_update(void) {
 
 extern void fb_clear_attrs(u8 bg)
 {
-	memset((u8 *)0x5800, bg, 0x300);
+	memset(VRAM_ATTRS, bg, 0x300);
 }
