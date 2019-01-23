@@ -8,13 +8,14 @@ set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GENERATED_ROOT})
 set(PALETTE 0 6 2 7)
 
-include_directories(${GENERATED_ROOT})
+include_directories(${GENERATED_ROOT} sources)
 
 macro(generate_texture)
 	cmake_parse_arguments(_GT "" "NAME;SOURCE" "PALETTE" ${ARGN})
 	if ("X${_GT_PALETTE}" STREQUAL "X")
 		set(_GT_PALETTE "${PALETTE}")
 	endif()
+
 	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/texture_${_GT_NAME}.c)
 	add_custom_command(OUTPUT ${GENERATED_ROOT}/texture_${_GT_NAME}.c ${GENERATED_ROOT}/texture_${_GT_NAME}.h
 		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py -c ${_GT_SOURCE} ${_GT_NAME} -p ${_GT_PALETTE}
@@ -52,6 +53,7 @@ set(SOURCES
 	sources/init.s
 	sources/tiles.c
 	sources/days.c
+	sources/texture.c
 #	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})

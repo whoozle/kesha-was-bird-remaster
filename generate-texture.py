@@ -8,6 +8,7 @@ import random
 parser = argparse.ArgumentParser(description='Compile font.')
 parser.add_argument('source', help='input file')
 parser.add_argument('name', help='name')
+parser.add_argument('--background', '-b', help='background-color', default=0, type=int)
 parser.add_argument('--compress', '-c', action='store_true', help='compress bitmap with lz4 algorithm')
 parser.add_argument('--algorithm', '-A', type=str, help='select algo', default='lz4')
 parser.add_argument('--palette', '-p', nargs='+', help='palette')
@@ -78,10 +79,15 @@ header, source = [], []
 header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
 header.append("#define TEXTURE_%s_H" %args.name.upper())
 header.append('')
-header.append("extern const unsigned char %s_data[];" %(args.name))
-header.append("extern const unsigned char %s_attrs[];" %(args.name))
-header.append("#define %s_DATA_SIZE (%d)" %(args.name.upper(), len(data)))
-header.append("#define %s_ATTRS_SIZE (%d)" %(args.name.upper(), len(attrs)))
+header.append('#include "texture.h"')
+header.append('')
+header.append("extern const Texture texture_%s;" %(args.name))
+header.append("#define TEXTURE_%s_DATA_SIZE (%d)" %(args.name.upper(), len(data)))
+header.append("#define TEXTURE_%s_ATTRS_SIZE (%d)" %(args.name.upper(), len(attrs)))
+header.append('')
+
+source.append('#include "texture_%s.h"' %args.name)
+source.append('')
 
 if args.compress:
 	if args.algorithm == "lz4":
@@ -93,22 +99,24 @@ if args.compress:
 
 	ctotal, total = len(compressed_data) + len(compressed_attrs), len(data) + len(attrs)
 	header.append("//compressed size: %d+%d (%d) of %d+%d (%d) = %d%%\n" %(len(compressed_data), len(compressed_attrs), ctotal, len(data), len(attrs), total, 100 * ctotal // total))
-	header.append("#define %s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
-	header.append("#define %s_ATTRS_CSIZE (%d)" %(args.name.upper(), len(compressed_attrs)))
+	header.append("#define TEXTURE_%s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
+	header.append("#define TEXTURE_%s_ATTRS_CSIZE (%d)" %(args.name.upper(), len(compressed_attrs)))
 	hexdata = ", ".join(map(hex, compressed_data))
-	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
+	source.append("static const u8 data[] = {%s};" %(hexdata))
 	hexdata = ", ".join(map(hex, compressed_attrs))
-	source.append("const unsigned char %s_attrs[] = {%s};" %(args.name, hexdata))
+	source.append("static const u8 attrs[] = {%s};" %(hexdata))
 else:
 	hexdata = ", ".join(map(hex, data))
-	source.append("const unsigned char %s_data[] = {%s};" %(args.name, hexdata))
+	source.append("static const u8 data[] = {%s};" %(hexdata))
 	hexdata = ", ".join(map(hex, attrs))
-	source.append("const unsigned char %s_attrs[] = {%s};" %(args.name, hexdata))
+	source.append("static const u8 attrs[] = {%s};" %(hexdata))
 
 header.append('')
 header.append("#endif")
 
 header.append('')
+source.append('')
+source.append('const Texture texture_%s = { data, attrs, %d };' %(args.name, palette[0]))
 source.append('')
 
 with open("texture_%s.h" %args.name, "wt") as f:

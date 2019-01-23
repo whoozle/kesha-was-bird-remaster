@@ -61,3 +61,8 @@ void fb_update(void) {
 		dst = (u8*)fb_next_line((u16)next);
 	}
 }
+
+extern void fb_clear_attrs(u8 bg)
+{
+	memset((u8 *)0x5800, bg, 0x300);
+}
