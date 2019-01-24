@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import argparse
 
@@ -406,23 +406,23 @@ import json
 
 _source += '\treturn\n\n'
 prefix = args.prefix
-with open(os.path.join(prefix, 'dialogs.8o'), 'w') as f:
+with open(os.path.join(prefix, 'dialogs.c'), 'w') as f:
 	_source = """\
-:const dialog_line_1_x 27
-:const dialog_line_2_x 27
-:const dialog_line_3_x 10
-:const dialog_line_4_x 10
+#define dialog_line_1_x 27
+#define  dialog_line_2_x 27
+#define  dialog_line_3_x 10
+#define  dialog_line_4_x 10
 
-:const dialog_line_1_y 10
-:const dialog_line_2_y 20
-:const dialog_line_3_y 30
-:const dialog_line_4_y 40
+#define  dialog_line_1_y 10
+#define  dialog_line_2_y 20
+#define  dialog_line_3_y 30
+#define  dialog_line_4_y 40
 
-:const dialog_head_1_x 9
-:const dialog_head_1_y 10
+#define  dialog_head_1_x 9
+#define  dialog_head_1_y 10
 
-:const dialog_head_2_x 100
-:const dialog_head_2_y 20
+#define  dialog_head_2_x 100
+#define  dialog_head_2_y 20
 
 """ + _heads_source + _source
 	f.write(_source)

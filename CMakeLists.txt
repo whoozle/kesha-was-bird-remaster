@@ -35,12 +35,22 @@ macro(generate_font)
 endmacro()
 
 macro(generate_text)
-	cmake_parse_arguments(_GT "" "SOURCES" "" ${ARGN})
+	cmake_parse_arguments(_GT "" "" "SOURCES" ${ARGN})
 	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/text.c)
 	add_custom_command(OUTPUT ${GENERATED_ROOT}/text.c ${GENERATED_ROOT}/text.h
 		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-text.py ${GENERATED_ROOT} ${_GT_SOURCES}
 		WORKING_DIRECTORY ${GENERATED_ROOT}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-text.py ${_GT_SOURCES}
+	)
+endmacro()
+
+macro(generate_dialogs)
+	cmake_parse_arguments(_GT "" "" "" ${ARGN})
+	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/dialogs.c)
+	add_custom_command(OUTPUT ${GENERATED_ROOT}/dialogs.c ${GENERATED_ROOT}/dialogs.json
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-dialogs.py ${GENERATED_ROOT}
+		WORKING_DIRECTORY ${GENERATED_ROOT}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-dialogs.py
 	)
 endmacro()
 
@@ -79,6 +89,9 @@ generate_texture(NAME head_fish			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/head
 generate_texture(NAME head_pets			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/pets2.png)
 
 generate_font(NAME font					SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/font/5.font)
+
+generate_dialogs()
+generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json ${GENERATED_ROOT}/dialogs.json)
 
 #generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json)
 
