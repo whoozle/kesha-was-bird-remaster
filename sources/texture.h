@@ -8,6 +8,7 @@ struct Texture
 	const u8 *	data;
 	const u8 *	attrs;
 	u8 			background;
+	u8			compressed;
 };
 typedef struct Texture Texture;
 

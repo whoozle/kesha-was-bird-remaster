@@ -82,6 +82,7 @@ header.append('')
 header.append('#include "texture.h"')
 header.append('')
 header.append("extern const Texture texture_%s;" %(args.name))
+header.append('')
 header.append("#define TEXTURE_%s_DATA_SIZE (%d)" %(args.name.upper(), len(data)))
 header.append("#define TEXTURE_%s_ATTRS_SIZE (%d)" %(args.name.upper(), len(attrs)))
 header.append('')
@@ -89,8 +90,10 @@ header.append('')
 source.append('#include "texture_%s.h"' %args.name)
 source.append('')
 
-if args.compress:
-	if args.algorithm == "lz4":
+def compress(data, attrs, compression = None):
+	if compression is None:
+		return data, attrs, False
+	elif compression == 'lz4':
 		from lz4.block import compress
 		compressed_data = bytearray(compress(data, mode='high_compression', compression=12))
 		compressed_attrs = bytearray(compress(attrs, mode='high_compression', compression=12))
@@ -98,25 +101,31 @@ if args.compress:
 		raise Exception("unknown compression %s" %args.algorithm)
 
 	ctotal, total = len(compressed_data) + len(compressed_attrs), len(data) + len(attrs)
+	if ctotal >= total:
+		return data, attrs, False
+
 	header.append("//compressed size: %d+%d (%d) of %d+%d (%d) = %d%%\n" %(len(compressed_data), len(compressed_attrs), ctotal, len(data), len(attrs), total, 100 * ctotal // total))
 	header.append("#define TEXTURE_%s_DATA_CSIZE (%d)" %(args.name.upper(), len(compressed_data)))
 	header.append("#define TEXTURE_%s_ATTRS_CSIZE (%d)" %(args.name.upper(), len(compressed_attrs)))
-	hexdata = ", ".join(map(hex, compressed_data))
-	source.append("static const u8 data[] = {%s};" %(hexdata))
-	hexdata = ", ".join(map(hex, compressed_attrs))
-	source.append("static const u8 attrs[] = {%s};" %(hexdata))
-else:
-	hexdata = ", ".join(map(hex, data))
-	source.append("static const u8 data[] = {%s};" %(hexdata))
-	hexdata = ", ".join(map(hex, attrs))
-	source.append("static const u8 attrs[] = {%s};" %(hexdata))
+	return compressed_data, compressed_attrs, True
+
+
+compression = None
+if args.compress:
+	compression = args.algorithm
+
+data, attrs, compressed = compress(data, attrs, compression)
+hexdata = ", ".join(map(hex, data))
+source.append("static const u8 data[] = {%s};" %(hexdata))
+hexdata = ", ".join(map(hex, attrs))
+source.append("static const u8 attrs[] = {%s};" %(hexdata))
 
 header.append('')
 header.append("#endif")
 
 header.append('')
 source.append('')
-source.append('const Texture texture_%s = { data, attrs, %d };' %(args.name, palette[0]))
+source.append('const Texture texture_%s = { data, attrs, %d, %d };' %(args.name, palette[0], 1 if compressed else 0 ))
 source.append('')
 
 with open("texture_%s.h" %args.name, "wt") as f:
