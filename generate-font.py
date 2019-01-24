@@ -39,6 +39,7 @@ def generate(name, file, font_height = 5, space_width = 3):
 
 		glyph = 0
 		index_source = ""
+		font_data = ""
 		for ch in xrange(cmin, cmax + 1):
 			key = chr(ch + 31)
 			if key in font:
@@ -52,12 +53,15 @@ def generate(name, file, font_height = 5, space_width = 3):
 							value |= (0x80 >> i)
 					glyph_data.append(value)
 
-				index_source += "\t{ %d, %d, %d, { %s } },\n" %(width, height, descent, ", ".join(["0x%02x" %x for x in glyph_data]))
+				font_data += "static const u8 glyph_data_%d[] = { %s };\n" %(ch, ", ".join(["0x%02x" %x for x in glyph_data]))
+				index_source += "\t{ %d, %d, %d, glyph_data_%d },\n" %(width, height, descent, ch)
 				#print key, font[key]
 				glyph += 1
 			else:
 				index_source += "\t{ %d, 0, 0 },\n" %space_width
 	source = '#include "font_%s.h"\n\n' %name
+	source += font_data
+	source += "\n"
 	source += "const Glyph font_%s[%d] =\n{\n" %(name, cmax - cmin + 1)
 	source += index_source
 	source += "\n};\n"
