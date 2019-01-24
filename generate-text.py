@@ -6,7 +6,6 @@ import json
 
 parser = argparse.ArgumentParser(description='Compile font.')
 parser.add_argument('target', help='target directory')
-parser.add_argument('address', help='target address')
 parser.add_argument('sources', help='input file', nargs='+')
 args = parser.parse_args()
 
@@ -14,23 +13,19 @@ offsets = []
 data = []
 lookup = {}
 
-addr = int(args.address, 16)
-header = """\
-:const data_text_hi 0x%02x
-:const data_text_lo 0x%02x
-""" %(addr >> 8, addr & 0xff)
+header = '#ifndef KESHA_TEXT_H\n#define KESHA_TEXT_H\n\n'
 
 def add(key, value):
 	global header, offsets, data, lookup
 
 	if value in lookup:
 		index = lookup[value]
-		header += ":const text_%s %d\n" %(key, index)
+		header += "#define text_%s (%d)\n" %(key, index)
 		return
 
 	index, offset = len(offsets), len(data)
 	lookup[value] = index
-	header += ":const text_%s %d\n" %(key, index)
+	header += "#define text_%s (%d)\n" %(key, index)
 	offsets.append(offset)
 	for ch in value:
 		if ch == '\n':
@@ -51,8 +46,10 @@ for source in args.sources:
 		else:
 			add(key, value)
 
-source  = "#text size %u + %u = %u\n" %(len(data), len(offsets) * 2, len(data) + len(offsets) * 2)
-source += ":org 0x%04x\n" %(addr)
+header += '\n#endif\n'
+
+source = '#include "text.h"\n\n'
+source += "//text size %u + %u = %u\n" %(len(data), len(offsets) * 2, len(data) + len(offsets) * 2)
 source += ": data_text\n\t "
 source += " ".join(["0x%02x" %i for i in data])
 source += "\n\n"
@@ -60,8 +57,8 @@ source += ": data_text_index\n\t"
 source += " ".join(["0x%02x 0x%02x" %(x & 0xff, x >> 8) for x in offsets])
 source += "\n\n"
 
-with open(os.path.join(args.target, 'texts.8o'), 'w') as f:
+with open(os.path.join(args.target, 'text.h'), 'w') as f:
 	f.write(header)
 
-with open(os.path.join(args.target, 'texts_data.8o'), 'w') as f:
+with open(os.path.join(args.target, 'text.c'), 'w') as f:
 	f.write(source)
