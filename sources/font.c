@@ -29,3 +29,6 @@ void font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 		}
 	}
 }
+
+void text_draw(u8 x, u8 y, u8 textId)
+{ }

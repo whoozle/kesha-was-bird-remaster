@@ -48,14 +48,14 @@ for source in args.sources:
 
 header += '\n#endif\n'
 
-source = '#include "text.h"\n\n'
+source = '#include "text.h"\n#include "types.h"\n\n'
 source += "//text size %u + %u = %u\n" %(len(data), len(offsets) * 2, len(data) + len(offsets) * 2)
-source += ": data_text\n\t "
-source += " ".join(["0x%02x" %i for i in data])
-source += "\n\n"
-source += ": data_text_index\n\t"
-source += " ".join(["0x%02x 0x%02x" %(x & 0xff, x >> 8) for x in offsets])
-source += "\n\n"
+source += "static const u8 data_text[] = { "
+source += ", ".join(["0x%02x" %i for i in data])
+source += " };\n\n"
+source += "static const u8 data_text_index[] = { "
+source += ", ".join(["0x%02x, 0x%02x" %(x & 0xff, x >> 8) for x in offsets])
+source += " };\n\n"
 
 with open(os.path.join(args.target, 'text.h'), 'w') as f:
 	f.write(header)

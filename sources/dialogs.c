@@ -5,8 +5,6 @@
 #include "text.h"
 #include "tiles.h"
 
-#warning STUBS
-
 u8 audio_click;
 u8 pets_plan;
 

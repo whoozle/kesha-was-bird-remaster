@@ -46,7 +46,6 @@ endmacro()
 
 macro(generate_dialogs)
 	cmake_parse_arguments(_GT "" "" "" ${ARGN})
-	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/_dialogs.c)
 	add_custom_command(OUTPUT ${GENERATED_ROOT}/_dialogs.c ${GENERATED_ROOT}/dialogs.json
 		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-dialogs.py ${GENERATED_ROOT}
 		WORKING_DIRECTORY ${GENERATED_ROOT}

@@ -11,3 +11,6 @@ void texture_draw_fullscreen(const Texture *texture)
 	lz4_unpack(fbData, texture->data);
 	lz4_unpack(fbAttr, texture->attrs);
 }
+
+void texture_draw(const Texture *texture, u8 x, u8 y)
+{ }
