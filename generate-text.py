@@ -9,24 +9,24 @@ parser.add_argument('target', help='target directory')
 parser.add_argument('sources', help='input file', nargs='+')
 args = parser.parse_args()
 
-offsets = []
 data = []
 lookup = {}
 
-header = '#ifndef KESHA_TEXT_H\n#define KESHA_TEXT_H\n\n'
+header = '#ifndef KESHA_TEXT_H\n#define KESHA_TEXT_H\n\n#include "types.h"\n\n'
 
 def add(key, value):
-	global header, offsets, data, lookup
+	global header, data, lookup
 
 	if value in lookup:
 		index = lookup[value]
 		header += "#define text_%s (%d)\n" %(key, index)
 		return
 
-	index, offset = len(offsets), len(data)
+	index = len(data)
 	lookup[value] = index
 	header += "#define text_%s (%d)\n" %(key, index)
-	offsets.append(offset)
+
+	bytes = bytearray()
 	for ch in value:
 		if ch == '\n':
 			v = 0xff
@@ -34,8 +34,9 @@ def add(key, value):
 			v = ord(ch) - 31
 		if v < 0:
 			raise Exception('invalid character %s' %repr(ch))
-		data.append(v)
-	data.append(0)
+		bytes.append(v)
+	bytes.append(0)
+	data.append(bytes)
 
 for source in args.sources:
 	messages = json.load(open(source))
@@ -46,19 +47,21 @@ for source in args.sources:
 		else:
 			add(key, value)
 
+header += "\nextern const u8* text_index[%d];\n\n" %len(data)
+
 header += '\n#endif\n'
 
 source = '#include "text.h"\n#include "types.h"\n\n'
-source += "//text size %u + %u = %u\n" %(len(data), len(offsets) * 2, len(data) + len(offsets) * 2)
-source += "static const u8 data_text[] = { "
-source += ", ".join(["0x%02x" %i for i in data])
-source += " };\n\n"
-source += "static const u8 data_text_index[] = { "
-source += ", ".join(["0x%02x, 0x%02x" %(x & 0xff, x >> 8) for x in offsets])
-source += " };\n\n"
+source_index = ''
+for idx, bytes in enumerate(data):
+	source += 'static const u8 text_data_%d[] = { ' %idx + ", ".join(["0x%02x" %i for i in bytes]) + ' };\n'
+source_index += "const u8 * text_index[%d] = {\n" %len(data)
+for idx, bytes in enumerate(data):
+	source_index += "\ttext_data_%d,\n" %idx
+source_index += "};\n"
 
 with open(os.path.join(args.target, 'text.h'), 'w') as f:
 	f.write(header)
 
 with open(os.path.join(args.target, 'text.c'), 'w') as f:
-	f.write(source)
+	f.write(source + source_index)
