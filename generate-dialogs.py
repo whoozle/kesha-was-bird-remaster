@@ -415,7 +415,7 @@ with open(os.path.join(prefix, '_dialogs.c'), 'w') as f:
 #define  dialog_head_2_x 100
 #define  dialog_head_2_y 20
 
-""" + _heads_source + _source
+""" + _heads_source + _source + "}\n"
 	f.write(_source)
 
 with open(os.path.join(prefix, 'dialogs.json'), 'w') as f:
