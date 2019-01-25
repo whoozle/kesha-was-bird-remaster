@@ -19,10 +19,9 @@ _text = 0
 
 for i in xrange(1, 5):
 	_heads_source += """\
-: dialog_draw_line_{line}
-	va := dialog_line_{line}_x
-	vb := dialog_line_{line}_y
-	jump draw_text
+static void dialog_draw_line_{line}(u8 textId)
+{{ text_draw(dialog_line_{line}_x, dialog_line_{line}_y, textId); }}
+
 """.format(line = i)
 
 def clear_state():
@@ -36,10 +35,10 @@ def dialog(dialog, idx):
 	if _first_day:
 		_first_day = False
 	else:
-		_source += '\treturn\n\n'
+		_source += '\treturn;\n}\n'
 
 	clear_state()
-	_source += ': dialog_%s_%d\n\tpanel_draw\n' %(dialog, idx)
+	_source += 'void dialog_%s_%d()\n{\n\tpanel_draw();\n' %(dialog, idx)
 
 def head(idx, name):
 	global _heads_source, _heads, _source
@@ -47,18 +46,14 @@ def head(idx, name):
 		key = (idx, name)
 		if key not in _draw_heads:
 			_heads_source += """\
-: heads_draw_{name}_{idx}
-	v0 := dialog_head_{idx}_x
-	v1 := dialog_head_{idx}_y
-	i := long tile_{name}_data
-	sprite v0 v1 0
-	return\n\n""".format(name = name, idx = idx)
+static void heads_draw_{name}_{idx}()
+{{ texture_draw(&texture_head_{name}, dialog_head_{idx}_x, dialog_head_{idx}_y); }}\n""".format(name = name, idx = idx)
 			_draw_heads.add(key)
 	if _heads[idx]:
-		_source += '\theads_draw_%s_%d\n' %(_heads[idx], idx) #erase old head
+		_source += '\theads_draw_%s_%d();\n' %(_heads[idx], idx) #erase old head
 	_heads[idx] = name
 	if name:
-		_source += '\theads_draw_%s_%d\n' %(name, idx) #erase old head
+		_source += '\theads_draw_%s_%d();\n' %(name, idx) #erase old head
 	pass
 
 def sleep(delay):
@@ -67,13 +62,12 @@ def sleep(delay):
 		if delay not in _sleeps:
 			_sleeps.add(delay)
 			_heads_source += """\
-: sleep_{delay}
-		va := {delay}
-		jump sleep
+static void sleep_{delay}(void)
+{{ sleep({delay}); }}
 """.format(delay = delay)
 
 		_source += """\
-	sleep_{delay}
+	sleep_{delay}();
 """.format(delay = delay)
 
 def text(text, delay = 60):
@@ -81,8 +75,7 @@ def text(text, delay = 60):
 	id = 'dialog_%s_%d_%d' %(_dialog, _dialog_idx, _text)
 
 	_source += """
-	vc := text_{id}
-	dialog_draw_line_{line}
+	dialog_draw_line_{line}(text_{id});
 
 """.format(line = _line, id = id)
 	sleep(delay)
@@ -91,15 +84,9 @@ def text(text, delay = 60):
 	_text += 1
 	_texts[id] = text
 
-def call(name, *args, **kw):
+def call(name, *args):
 	global _source
-	if len(args) > 4:
-		raise Exception("only 4 arguments supported")
-	regs = ['va', 'vb', 'vc', 'vd']
-	if kw:
-		_source += '\n'.join(["\t%s := %s" %(reg, arg) for reg, arg in kw.iteritems()])
-	_source += '\n'.join(["\t%s := %s" %(reg, arg) for reg, arg in zip(regs, args)])
-	_source += '\n\t%s\n\n' %name
+	_source += '\n\t%s(%s);\n\n' %(name, ', '.join([arg for arg in args]))
 
 def skip_line():
 	global _line
@@ -244,7 +231,7 @@ head(1, 'ninja')
 text("She's a dog, you know")
 text("She will not", 0)
 text(" give her collar to us")
-call('set_flag', i = 'pets_plan')
+call('set_flag', '&pets_plan')
 
 dialog('spam', 1)
 text('Any problems with SPAM?')
@@ -303,7 +290,7 @@ text('eight plus five star three', 150)
 
 dialog('ninja', 4)
 sleep(30)
-call('audio_play_sync', i = 'long audio_click')
+call('audio_play_sync', '&audio_click')
 sleep(30)
 head(1, 'kesha')
 text('I heard a click', 120)
@@ -404,10 +391,14 @@ text("ENTER PIN", 0)
 import os.path
 import json
 
-_source += '\treturn\n\n'
+_includes = ''
+for _, head in _draw_heads:
+	_includes += "#include \"texture_head_%s.h\"\n" %head
+
+_source += '\treturn;\n\n'
 prefix = args.prefix
-with open(os.path.join(prefix, 'dialogs.c'), 'w') as f:
-	_source = """\
+with open(os.path.join(prefix, '_dialogs.c'), 'w') as f:
+	_source = _includes + """\
 #define dialog_line_1_x 27
 #define  dialog_line_2_x 27
 #define  dialog_line_3_x 10

@@ -13,6 +13,6 @@ struct Texture
 typedef struct Texture Texture;
 
 void texture_draw_fullscreen(const Texture *texture);
-
+void texture_draw(const Texture *texture, u8 x, u8 y);
 
 #endif

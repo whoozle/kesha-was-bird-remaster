@@ -46,8 +46,8 @@ endmacro()
 
 macro(generate_dialogs)
 	cmake_parse_arguments(_GT "" "" "" ${ARGN})
-	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/dialogs.c)
-	add_custom_command(OUTPUT ${GENERATED_ROOT}/dialogs.c ${GENERATED_ROOT}/dialogs.json
+	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/_dialogs.c)
+	add_custom_command(OUTPUT ${GENERATED_ROOT}/_dialogs.c ${GENERATED_ROOT}/dialogs.json
 		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-dialogs.py ${GENERATED_ROOT}
 		WORKING_DIRECTORY ${GENERATED_ROOT}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-dialogs.py
@@ -79,7 +79,7 @@ generate_texture(NAME room				SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/room.png
 generate_texture(NAME head_kesha		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2.png)
 generate_texture(NAME head_kesha_o		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2_open.png)
 generate_texture(NAME head_kesha_e		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2_excited.png)
-generate_texture(NAME head_squirrel		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/squirrel_2.png)
+generate_texture(NAME head_cow			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/squirrel_2.png)
 generate_texture(NAME head_professor	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/professor2.png)
 generate_texture(NAME head_ninja		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/ninja2.png)
 generate_texture(NAME head_ninja_kesha	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/ninja_kesha.png)
@@ -87,6 +87,7 @@ generate_texture(NAME head_lab			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads
 generate_texture(NAME head_disabled		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/disabled.png)
 generate_texture(NAME head_fish			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/fish.png)
 generate_texture(NAME head_pets			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/pets2.png)
+generate_texture(NAME head_glitch		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/glitch.png)
 
 generate_font(NAME font					SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/font/5.font)
 
@@ -104,6 +105,7 @@ set(SOURCES
 	sources/days.c
 	sources/texture.c
 	sources/font.c
+	sources/dialogs.c
 #	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
