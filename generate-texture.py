@@ -125,7 +125,7 @@ header.append("#endif")
 
 header.append('')
 source.append('')
-source.append('const Texture texture_%s = { data, attrs, %d, %d };' %(args.name, palette[0], 1 if compressed else 0 ))
+source.append('const Texture texture_%s = { %d, %d, data, attrs, %d, %d };' %(args.name, w, h, palette[0], 1 if compressed else 0 ))
 source.append('')
 
 with open("texture_%s.h" %args.name, "wt") as f:

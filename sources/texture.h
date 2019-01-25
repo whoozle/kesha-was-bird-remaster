@@ -5,6 +5,8 @@
 
 struct Texture
 {
+	u8			width;
+	u8			height;
 	const u8 *	data;
 	const u8 *	attrs;
 	u8 			background;
