@@ -10,7 +10,7 @@ _dialog, _dialog_idx = 0, 0
 _heads = None
 _draw_heads = set()
 _sleeps = set()
-_source = ''
+_header, _source = '', ''
 _heads_source = ''
 _first_day = True
 _texts = {}
@@ -30,7 +30,7 @@ def clear_state():
 	_heads = {1: '', 2: ''}
 
 def dialog(dialog, idx):
-	global _first_day, _source, _dialog, _dialog_idx, _text
+	global _first_day, _source, _header, _dialog, _dialog_idx, _text
 	_dialog, _dialog_idx, _text = dialog, idx, 1
 	if _first_day:
 		_first_day = False
@@ -38,7 +38,8 @@ def dialog(dialog, idx):
 		_source += '\treturn;\n}\n'
 
 	clear_state()
-	_source += 'void dialog_%s_%d()\n{\n\tpanel_draw();\n' %(dialog, idx)
+	_header += 'void dialog_%s_%d(void);\n' %(dialog, idx)
+	_source += 'void dialog_%s_%d(void)\n{\n\tpanel_draw();\n' %(dialog, idx)
 
 def head(idx, name):
 	global _heads_source, _heads, _source
@@ -420,3 +421,7 @@ with open(os.path.join(prefix, '_dialogs.c'), 'w') as f:
 
 with open(os.path.join(prefix, 'dialogs.json'), 'w') as f:
 	json.dump(_texts, f)
+
+with open(os.path.join(prefix, '_dialogs.h'), 'w') as f:
+	_header = '#ifndef KESHA_DIALOGS\n#define KESHA_DIALOGS\n\n' + _header + '\n\n#endif\n'
+	f.write(_header)
