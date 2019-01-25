@@ -15,6 +15,7 @@
 	.area   _GSINIT
 
 _gsinit::
+	di
 	ld	bc, #l__INITIALIZER
 	ld	a, b
 	or	a, c
@@ -25,6 +26,7 @@ _gsinit::
 gsinit_next:
 
 	.area   _GSFINAL
+	ei
 	ret
 
 _halt::
@@ -37,4 +39,13 @@ _border::
 	add hl, sp
 	ld a, (hl)
 	out (254), a
+	ret
+
+_sleep::
+	ld hl, #2
+	add hl, sp
+	ld b, (hl)
+_sleep$:
+	halt
+	djnz _sleep$
 	ret

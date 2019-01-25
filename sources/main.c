@@ -7,5 +7,3 @@ void main() {
 	day_1();
 	halt();
 }
-
-void sleep(u8 frames) { }
