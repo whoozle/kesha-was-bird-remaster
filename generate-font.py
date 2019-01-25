@@ -58,7 +58,7 @@ def generate(name, file, font_height = 5, space_width = 3):
 				#print key, font[key]
 				glyph += 1
 			else:
-				index_source += "\t{ %d, 0, 0 },\n" %space_width
+				index_source += "\t{ %d, 0, 0, 0 },\n" %space_width
 	source = '#include "font_%s.h"\n\n' %name
 	source += font_data
 	source += "\n"
