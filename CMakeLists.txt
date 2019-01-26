@@ -105,6 +105,7 @@ set(SOURCES
 	sources/texture.c
 	sources/font.c
 	sources/dialogs.c
+	sources/phone.c
 #	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})

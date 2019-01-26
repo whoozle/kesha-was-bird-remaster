@@ -34,10 +34,9 @@ void day_intertitle(void)
 	u8 x = text_draw(50, y, text_day);
 	if (day_number[0])
 		x += font_draw_char('0' - CHAR_MIN + day_number[0], x, y);
-	if (day_number[1])
+	if (day_number[0] || day_number[1])
 		x += font_draw_char('0' - CHAR_MIN + day_number[1], x, y);
-	if (day_number[2])
-		x += font_draw_char('0' - CHAR_MIN + day_number[2], x, y);
+	x += font_draw_char('0' - CHAR_MIN + day_number[2], x, y);
 	sleep(180); //intertitle_delay
 }
 
@@ -50,6 +49,7 @@ void day_increment(void)
 		++day_number[1];
 		if (day_number[1] == 10)
 		{
+			day_number[1] = 0;
 			++day_number[0];
 		}
 	}
