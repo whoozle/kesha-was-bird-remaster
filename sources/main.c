@@ -1,6 +1,7 @@
 #include <string.h>
 #include "runtime.h"
 #include "days.h"
+#include "phone.h"
 
 void main() {
 	gsinit();
