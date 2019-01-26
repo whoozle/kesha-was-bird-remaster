@@ -13,4 +13,19 @@ void texture_draw_fullscreen(const Texture *texture)
 }
 
 void texture_draw(const Texture *texture, u8 x, u8 y)
-{ }
+{
+	u8 w = texture->width, h = texture->height;
+	u8 wb = (w >> 3);
+	u8 pitch = 16 - wb;
+
+	u16 dstOffset = ((u16)y << 4) + (x >> 3);
+	u8 * dst = fbData + dstOffset;
+	const u8 * src = texture->data;
+	while(h--)
+	{
+		u8 wcopy = wb;
+		while(wcopy--)
+			*dst++ ^= *src++;
+		dst += pitch;
+	}
+}
