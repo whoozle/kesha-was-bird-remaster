@@ -11,7 +11,10 @@ struct Glyph
 };
 typedef struct Glyph Glyph;
 
+#define CHAR_MIN (31)
+
 u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y);
+u8 font_draw_char(char ch, u8 x, u8 y);
 void text_draw(u8 x, u8 y, u8 textId);
 
 #endif

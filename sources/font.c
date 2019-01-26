@@ -34,7 +34,19 @@ u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 			base += 15;
 		}
 	}
+	fb_update_rect(x, y, w, glyph->height);
 	return w + 1;
+}
+
+u8 font_draw_char(char ch, u8 x, u8 y)
+{
+	if (ch >= FONT_FONT_CMIN && ch < FONT_FONT_CMAX)
+	{
+		const Glyph * glyph = font_font + (ch - FONT_FONT_CMIN);
+		return font_draw_glyph(glyph, x, y);
+	}
+	else
+		return 0;
 }
 
 void text_draw(u8 x, u8 y, u8 textId)
@@ -49,20 +61,18 @@ void text_draw(u8 x, u8 y, u8 textId)
 			break;
 
 		u8 w;
-		if (ch >= FONT_FONT_CMIN && ch < FONT_FONT_CMAX)
-		{
-			const Glyph * glyph = font_font + (ch - FONT_FONT_CMIN);
-			w = font_draw_glyph(glyph, cx, y);
-		}
-		else if (ch == 0xffu)
+		if (ch == 0xffu)
 		{
 			y += 8;
 			w = 0;
 			cx = x;
 		}
 		else
-			w = FONT_FONT_SPACE_WIDTH;
+		{
+			w = font_draw_char(ch, cx, y);
+			if (w == 0)
+				w = FONT_FONT_SPACE_WIDTH;
+		}
 		cx += w;
 	}
-	fb_update();
 }

@@ -30,36 +30,62 @@ static const u8 dup4[16] =
 //clears X, increment line number
 static u16 fb_next_line(u16 ptr)
 {
+	u8 x = (u8)ptr & 0x1fu;
 	u8 y = ptr >> 5;
-	if ((y & 0x38) == 0x38)
+	if ((y & 0x38u) == 0x38u)
 	{
 		++y; //YY111111 case will increment y automatically or increment YYYYYY111
-		y &= 0xc7; //wipe out lower 3 bits of y pos
+		y &= 0xc7u; //wipe out lower 3 bits of y pos
 	}
 	else
-		y += 8;
-	return 0x4000u | (y << 5);
+		y += 8u;
+	return 0x4000u | ((u16)y << 5) | x;
 }
 
-void fb_update(void) {
-	memcpy(VRAM_ATTRS + 0x80, fbAttr, 32 * 16);
-	u8 *dst = VRAM_ADDR + 0x80;
-	const u8 *src = fbData;
-	u8 lines = 64;
-	while(lines--)
+u8 * fb_get_base_addr(u8 x, u8 y)
+{
+	//0 1 0 [Y7 Y6] [Y2 Y1 Y0]    [Y5 Y4 Y3] [X4 X3 X2 X1 X0]
+	u8 y0 = y & 3;
+	u8 y1 = (y << 2) & 0xe0u;
+	u8 y2 = (y >> 3) & 0x18u;
+	return (u8 *) (((u16)(0x40 | y2 | y0) << 8) | y1 | (x >> 3));
+}
+
+void fb_update_rect_attrs(u8 ax, u8 ay, u8 aw, u8 ah)
+{
+	//u8 * dst = VRAM_ATTRS + FB_ATTR_OFFSET(ax, ay);
+}
+
+//update source (!) width in bytes (0-16) (128 original resolution, 8 pixel per byte)
+//update source (!) height
+void fb_update_rect_impl(u8 *base, const u8 *src, u8 srcPitch, u8 updateWidth, u8 updateHeight)
+{
+	while(updateHeight--)
 	{
-		u8 width = 16;
+		u8 width = updateWidth;
+		u8 *dst = base;
 		while(width--)
 		{
 			u8 srcByte = *src++;
 			*dst++ = dup4[srcByte >> 4];
 			*dst++ = dup4[srcByte & 0x0f];
 		}
-		--dst;
-		u8 * next = (u8*)fb_next_line((u16)dst);
-		memcpy(next, dst - 31, 32);
-		dst = (u8*)fb_next_line((u16)next);
+		src += srcPitch;
+		u8 * next = (u8*)fb_next_line((u16)base);
+		memcpy(next, base, updateWidth << 1);
+		base = (u8*)fb_next_line((u16)next);
 	}
+}
+
+void fb_update(void) {
+	memcpy(VRAM_ATTRS + 0x80, fbAttr, 32 * 16);
+	fb_update_rect_impl(VRAM_ADDR + 0x80, fbData, 0, 16, 64);
+}
+
+void fb_update_rect(u8 x, u8 y, u8 w, u8 h)
+{
+	w = ((x + w + 7) >> 3) - (x >> 3);
+	fb_update_rect_impl(fb_get_base_addr(x << 1, (y << 1) + 32), FB_BASE_ADDR(x, y), 16 - w, w, h);
 }
 
 extern void fb_clear_attrs(u8 bg)

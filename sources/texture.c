@@ -10,6 +10,7 @@ void texture_draw_fullscreen(const Texture *texture)
 	fb_clear_attrs(texture->background << 3);
 	lz4_unpack(fbData, texture->data);
 	lz4_unpack(fbAttr, texture->attrs);
+	fb_update();
 }
 
 void texture_draw(const Texture *texture, u8 x, u8 y)
@@ -18,8 +19,7 @@ void texture_draw(const Texture *texture, u8 x, u8 y)
 	u8 wb = (w >> 3);
 	u8 pitch = 16 - wb;
 
-	u16 dstOffset = ((u16)y << 4) + (x >> 3);
-	u8 * dst = fbData + dstOffset;
+	u8 * dst = FB_BASE_ADDR(x, y);
 	const u8 * src = texture->data;
 	u8 bit = x & 7;
 	if (bit == 0)
@@ -48,5 +48,5 @@ void texture_draw(const Texture *texture, u8 x, u8 y)
 			dst += pitch;
 		}
 	}
-
+	fb_update_rect(x, y, w, texture->height);
 }
