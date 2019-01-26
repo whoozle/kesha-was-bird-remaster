@@ -21,11 +21,32 @@ void texture_draw(const Texture *texture, u8 x, u8 y)
 	u16 dstOffset = ((u16)y << 4) + (x >> 3);
 	u8 * dst = fbData + dstOffset;
 	const u8 * src = texture->data;
-	while(h--)
+	u8 bit = x & 7;
+	if (bit == 0)
 	{
-		u8 wcopy = wb;
-		while(wcopy--)
-			*dst++ ^= *src++;
-		dst += pitch;
+		while(h--)
+		{
+			u8 wcopy = wb;
+			while(wcopy--)
+				*dst++ ^= *src++;
+			dst += pitch;
+		}
 	}
+	else
+	{
+		while(h--)
+		{
+			u8 wcopy = wb;
+			while(wcopy--)
+			{
+				u8 srcByte = *src++;
+				u8 b1 = srcByte >> bit;
+				u8 b2 = srcByte << (8 - bit);
+				*dst++ ^= b1;
+				*dst ^= b2;
+			}
+			dst += pitch;
+		}
+	}
+
 }
