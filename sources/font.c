@@ -49,7 +49,7 @@ u8 font_draw_char(char ch, u8 x, u8 y)
 		return 0;
 }
 
-void text_draw(u8 x, u8 y, u8 textId)
+u8 text_draw(u8 x, u8 y, u8 textId)
 {
 	const u8 * text = text_index[textId];
 	u8 cx = x;
@@ -75,4 +75,5 @@ void text_draw(u8 x, u8 y, u8 textId)
 		}
 		cx += w;
 	}
+	return cx;
 }

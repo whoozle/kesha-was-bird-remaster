@@ -47,5 +47,5 @@ _sleep::
 	ld b, (hl)
 _sleep$:
 	halt
-	djnz _sleep$
+;	djnz _sleep$ ; uncomment me later
 	ret
