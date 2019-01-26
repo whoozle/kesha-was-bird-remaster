@@ -6,18 +6,16 @@
 
 u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 {
-	u16 base = ((u16)y << 4) + (x >> 3);
 	u8 h = glyph->height;
 	if (h == 0)
 		return FONT_FONT_SPACE_WIDTH;
 
+	u16 base = ((u16)y << 4) + (x >> 3);
+	const u8 * data = glyph->data;
 	u8 w = glyph->width;
-
 	y -= glyph->descend;
 
 	u8 xp = x & 7;
-
-	const u8 * data = glyph->data;
 	if (xp + w <= 8)
 	{
 		while(h--)
@@ -39,9 +37,6 @@ u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 	return w + 1;
 }
 
-#define CMIN (32 + FONT_FONT_CMIN)
-#define CMAX (32 + FONT_FONT_CMAX)
-
 void text_draw(u8 x, u8 y, u8 textId)
 {
 	const u8 * text = text_index[textId];
@@ -54,9 +49,9 @@ void text_draw(u8 x, u8 y, u8 textId)
 			break;
 
 		u8 w;
-		if (ch >= CMIN && ch < CMAX)
+		if (ch >= FONT_FONT_CMIN && ch < FONT_FONT_CMAX)
 		{
-			const Glyph * glyph = font_font + (ch - CMIN);
+			const Glyph * glyph = font_font + (ch - FONT_FONT_CMIN);
 			w = font_draw_glyph(glyph, cx, y);
 		}
 		else if (ch == 0xffu)
