@@ -1,7 +1,7 @@
 #include "fb.h"
 #include <string.h>
 
-u8 fbData[128 * 64 / 4];
+u8 fbData[128 * 64 / 8];
 u8 fbAttr[32 * 16];
 
 static const u8 dup4[16] =

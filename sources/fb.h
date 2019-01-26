@@ -5,6 +5,7 @@
 #define VRAM_ADDR ((u8 *)0x4000)
 #define VRAM_ATTRS ((u8 *)0x5800)
 
+
 #define FB_BASE_OFFSET(x, y) (((u16)(y) << 4) | ((x) >> 3))
 #define FB_BASE_ADDR(x, y) (fbData + FB_BASE_OFFSET(x, y))
 
@@ -12,7 +13,7 @@
 #define FB_ATTR_OFFSET(x, y) (((u16)(y) << 5) | x)
 #define FB_ATTR_OFFSET_PIXEL(x, y) FB_ATTR_OFFSET(FB_PIXEL_TO_ATTR(x), FB_PIXEL_TO_ATTR(y))
 
-extern u8 fbData[128 * 64 / 4];
+extern u8 fbData[128 * 64 / 8];
 extern u8 fbAttr[32 * 16];
 
 void fb_update(void);
