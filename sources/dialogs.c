@@ -4,11 +4,11 @@
 #include "runtime.h"
 #include "text.h"
 #include "tiles.h"
+#include "days.h"
 
 u8 audio_click;
 u8 pets_plan;
 
-void day_intertitle(void) { }
 void room_draw(void) { }
 void drinking_draw(void) { }
 void professor_show_banner(void) { }
