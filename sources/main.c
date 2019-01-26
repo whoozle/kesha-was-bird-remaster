@@ -18,5 +18,4 @@ void main() {
 		} while (dispatch_event());
 
 	}
-	halt();
 }

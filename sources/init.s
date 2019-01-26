@@ -29,11 +29,6 @@ gsinit_next:
 	ei
 	ret
 
-_halt::
-1$:
-	halt
-	jr	1$
-
 _border::
 	ld hl, #2
 	add hl, sp
