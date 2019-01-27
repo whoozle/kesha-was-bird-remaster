@@ -2,13 +2,21 @@
 #include "vars.h"
 #include "_dialogs.h"
 #include "tiles.h"
-#include "texture_drinking.h"
 #include "runtime.h"
+#include "text.h"
+
+#include "texture_drinking.h"
+#include "texture_professor.h"
 
 void drinking_draw(void)
 {
 	texture_draw_fullscreen(&texture_drinking);
 	sleep(90);
+}
+
+void professor_show_banner(void)
+{
+	banner_draw(&texture_professor, text_professor, 58, 0);
 }
 
 void call_galina(void)
