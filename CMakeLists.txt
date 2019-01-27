@@ -1,7 +1,7 @@
 project(kesha C ASM)
 cmake_minimum_required(VERSION 3.13)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --opt-code-size --peep-asm --peep-return")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --opt-code-size --peep-asm --peep-return --no-xinit-opt")
 set(CMAKE_EXE_LINKER_FLAGS "--code-loc 0x6000 --data-loc 0xf000 --no-xinit-opt")
 
 set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
