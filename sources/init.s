@@ -42,7 +42,7 @@ _sleep::
 	ld b, (hl)
 _sleep$:
 	halt
-;	djnz _sleep$ ; uncomment me later
+	djnz _sleep$
 	ret
 
 _get_r::
