@@ -1,4 +1,4 @@
-#include "call_galina.h"
+#include "calls.h"
 #include "vars.h"
 #include "_dialogs.h"
 #include "tiles.h"

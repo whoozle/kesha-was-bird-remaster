@@ -108,6 +108,10 @@ set(SOURCES
 	sources/phone.c
 	sources/vars.c
 	sources/call_galina.c
+	sources/call_ninja.c
+	sources/call_invalid.c
+	sources/call_lab.c
+	sources/call_pets.c
 #	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})

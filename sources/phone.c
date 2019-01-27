@@ -2,10 +2,11 @@
 #include "texture.h"
 #include "texture_phone.h"
 #include "keyboard.h"
+#include "_dialogs.h"
 #include "font.h"
 #include "vars.h"
 #include "text.h"
-#include "call_galina.h"
+#include "calls.h"
 #include <string.h>
 
 #define phone_number_x 		12
@@ -110,7 +111,13 @@ typedef struct Number Number;
 static const Number numbers[] =
 {
 	{ { 1, 1, 1, 3 }, &call_galina },
-	{ {0, 0, 0, 0}, 0 }
+	{ { 1, 3, 3, 7 }, &call_ninja }, //call_ninja
+	{ { 3, 4, 7, 4 }, &dialog_no_answer_5 },
+	{ { 7, 3, 7, 8 }, &call_pets }, //call pets
+	{ { 7, 3, 8, 7 }, &call_pets }, //call pets
+	{ { 7, 7, 2, 6 }, &dialog_spam_1 },
+	{ { 8, 5, 5, 5 }, &call_lab }, //call lab
+	{ {0, 0, 0, 0}, NULL }
 };
 
 void dispatch_call(void)
