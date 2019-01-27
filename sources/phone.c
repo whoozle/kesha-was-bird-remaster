@@ -13,7 +13,7 @@
 #define phone_number_y 		10
 #define phone_number_step 	8
 
-static u8 number[4] = { 0, 0, 0, 0, };
+static u8 number[4];
 static u8 number_size = 0;
 static u8 number_pos = phone_number_x;
 
@@ -74,6 +74,7 @@ static u8 poll_digit()
 
 static void clear_number() {
 	number_size = 0;
+	memset(number, 0xff, sizeof(number));
 	number_pos = phone_number_x;
 }
 
