@@ -10,10 +10,10 @@ u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 	if (h == 0)
 		return FONT_FONT_SPACE_WIDTH;
 
+	y -= glyph->descend;
 	u16 base = ((u16)y << 4) + (x >> 3);
 	const u8 * data = glyph->data;
 	u8 w = glyph->width;
-	y -= glyph->descend;
 
 	u8 xp = x & 7;
 	if (xp + w <= 8)
