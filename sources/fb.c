@@ -58,8 +58,9 @@ void fb_update_rect_attrs(u8 ax, u8 ay, u8 aw, u8 ah)
 
 //update source (!) width in bytes (0-16) (128 original resolution, 8 pixel per byte)
 //update source (!) height
-void fb_update_rect_impl(u8 *base, const u8 *src, u8 srcPitch, u8 updateWidth, u8 updateHeight)
+void fb_update_rect_impl(u8 *base, const u8 *src, u8 updateWidth, u8 updateHeight)
 {
+	u8 srcPitch = 16 - updateWidth;
 	while(updateHeight--)
 	{
 		u8 width = updateWidth;
@@ -79,13 +80,14 @@ void fb_update_rect_impl(u8 *base, const u8 *src, u8 srcPitch, u8 updateWidth, u
 
 void fb_update(void) {
 	memcpy(VRAM_ATTRS + 0x80, fbAttr, 32 * 16);
-	fb_update_rect_impl(VRAM_ADDR + 0x80, fbData, 0, 16, 64);
+	fb_update_rect_impl(VRAM_ADDR + 0x80, fbData, 16, 64);
 }
 
 void fb_update_rect(u8 x, u8 y, u8 w, u8 h)
 {
 	w = ((x + w + 7) >> 3) - (x >> 3);
-	fb_update_rect_impl(fb_get_base_addr(x << 1, (y << 1) + 32), FB_BASE_ADDR(x, y), 16 - w, w, h);
+	fb_update_rect_impl(fb_get_base_addr(x << 1, (y << 1) + 32), FB_BASE_ADDR(x, y), w, h);
+	//fb_update_rect_impl(fb_get_base_addr(0, (y << 1) + 32), FB_BASE_ADDR(0, y), 16, h);
 }
 
 extern void fb_clear_attrs(u8 bg)
