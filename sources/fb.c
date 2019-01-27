@@ -53,7 +53,16 @@ u8 * fb_get_base_addr(u8 x, u8 y)
 
 void fb_update_rect_attrs(u8 ax, u8 ay, u8 aw, u8 ah)
 {
-	//u8 * dst = VRAM_ATTRS + FB_ATTR_OFFSET(ax, ay);
+	u16 offset = FB_ATTR_OFFSET(ax, ay);
+	u8 * dst = VRAM_ATTRS + offset;
+	u8 * src = fbAttr + offset;
+	u8 pitch = 32 - aw;
+	while(ah--)
+	{
+		memcpy(dst, src, aw);
+		src += pitch;
+		dst += pitch;
+	}
 }
 
 //update source (!) width in bytes (0-16) (128 original resolution, 8 pixel per byte)
