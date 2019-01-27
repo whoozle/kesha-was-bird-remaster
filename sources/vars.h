@@ -14,4 +14,6 @@ extern u8 glitch_2_shown;
 extern u8 spam_spam_shown;
 extern u8 pets_spam_shown;
 
+inline void set_flag(u8 *flag) { *flag = 1; }
+
 #endif

@@ -5,6 +5,7 @@
 #include "font.h"
 #include "vars.h"
 #include "text.h"
+#include "call_galina.h"
 #include <string.h>
 
 #define phone_number_x 		12
@@ -100,9 +101,30 @@ void phone_call(void)
 	}
 }
 
+struct Number {
+	u8 number[4];
+	void (*handler)();
+};
+typedef struct Number Number;
+
+static const Number numbers[] =
+{
+	{ { 1, 1, 1, 3 }, &call_galina },
+	{ {0, 0, 0, 0}, 0 }
+};
+
 void dispatch_call(void)
 {
-
+	//if (check_glitch()) return;
+	const Number * n = numbers;
+	while(n->handler)
+	{
+		if (memcmp(n->number, number, 4) == 0)
+		{
+			return n->handler();
+		}
+	}
+	//call_invalid
 }
 
 u8 dispatch_event(void)

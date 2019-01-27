@@ -10,14 +10,12 @@
 u8 audio_click;
 
 void room_draw(void) { }
-void drinking_draw(void) { }
+void drinking_draw(void);
 void professor_show_banner(void) { }
 
 void ninja_show_banner(void) { }
 void ninja_show_eraser(void) { }
 void ninja_show_fday_device(void) { }
-
-void set_flag(u8 *flag) { *flag = 1; }
 
 void audio_play_sync(void *audio) { (void)audio; }
 void audio_invalid_number() { }
