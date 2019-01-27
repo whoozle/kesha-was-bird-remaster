@@ -45,7 +45,7 @@ static u16 fb_next_line(u16 ptr)
 u8 * fb_get_base_addr(u8 x, u8 y)
 {
 	//0 1 0 [Y7 Y6] [Y2 Y1 Y0]    [Y5 Y4 Y3] [X4 X3 X2 X1 X0]
-	u8 y0 = y & 3;
+	u8 y0 = y & 7;
 	u8 y1 = (y << 2) & 0xe0u;
 	u8 y2 = (y >> 3) & 0x18u;
 	return (u8 *) (((u16)(0x40 | y2 | y0) << 8) | y1 | (x >> 3));
