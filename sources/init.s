@@ -44,3 +44,8 @@ _sleep$:
 	halt
 ;	djnz _sleep$ ; uncomment me later
 	ret
+
+_get_r::
+	ld a, r
+	ld l, a
+	ret
