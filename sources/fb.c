@@ -94,9 +94,11 @@ void fb_update(void) {
 
 void fb_update_rect(u8 x, u8 y, u8 w, u8 h)
 {
-	w = ((x + w + 7) >> 3) - (x >> 3);
-	fb_update_rect_impl(fb_get_base_addr(x << 1, (y << 1) + 32), FB_BASE_ADDR(x, y), w, h);
-	//fb_update_rect_impl(fb_get_base_addr(0, (y << 1) + 32), FB_BASE_ADDR(0, y), 16, h);
+	//u8 r = (x + w + 15) & 0xf0u; //align 16 right
+	//x = x & 0xf0u; //align by 16
+	//w = r - x;
+	//fb_update_rect_impl(fb_get_base_addr(x << 1, (y << 1) + 32), FB_BASE_ADDR(x, y), w, h);
+	fb_update_rect_impl(fb_get_base_addr(0, (y << 1) + 32), FB_BASE_ADDR(0, y), 16, h);
 }
 
 extern void fb_clear_attrs(u8 bg)
