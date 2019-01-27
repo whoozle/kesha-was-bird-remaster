@@ -6,7 +6,7 @@
 #include "text.h"
 #include "runtime.h"
 
-u8 day_number[3] = { 0, 0, 1 };
+static u8 day_number[3] = { 0, 0, 1 };
 
 void day_next() {
 	day_increment();
