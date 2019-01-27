@@ -1,6 +1,8 @@
 #include "calls.h"
 #include "text.h"
 #include "tiles.h"
+#include "vars.h"
+#include "_dialogs.h"
 
 #include "texture_ninja.h"
 #include "texture_memory_erizer.h"
@@ -23,5 +25,18 @@ void ninja_show_fday_device(void)
 
 void call_ninja(void)
 {
-
+	u8 first_time = ninja_called == 0;
+	set_flag(&ninja_called);
+	if (pets_got_galina)
+	{
+		dialog_ninja_3();
+	}
+	else if (first_time)
+	{
+		dialog_ninja_1();
+	}
+	else
+	{
+		dialog_ninja_2();
+	}
 }

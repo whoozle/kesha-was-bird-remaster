@@ -130,8 +130,9 @@ void dispatch_call(void)
 		{
 			return n->handler();
 		}
+		++n;
 	}
-	//call_invalid
+	call_invalid();
 }
 
 u8 dispatch_event(void)
