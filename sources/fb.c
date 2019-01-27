@@ -39,7 +39,7 @@ static u16 fb_next_line(u16 ptr)
 	}
 	else
 		y += 8u;
-	return 0x4000u | ((u16)y << 5) | x;
+	return (u16)0x4000u | ((u16)y << 5) | x;
 }
 
 u8 * fb_get_base_addr(u8 x, u8 y)
