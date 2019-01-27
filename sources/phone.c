@@ -3,6 +3,8 @@
 #include "texture_phone.h"
 #include "keyboard.h"
 #include "font.h"
+#include "vars.h"
+#include "text.h"
 #include <string.h>
 
 #define phone_number_x 		12
@@ -12,6 +14,28 @@
 static u8 number[4] = { 0, 0, 0, 0, };
 static u8 number_size = 0;
 static u8 number_pos = phone_number_x;
+
+static void notepad_draw()
+{
+	u8 x = 64, y = 10;
+	text_draw(x, y, text_note_galya);
+	if (galina_calls >= 3) {
+		y += 8;
+		text_draw(x, y, text_note_ninja);
+	}
+	if (spam_spam_shown) {
+		y += 8;
+		text_draw(x, y, text_note_spam);
+	}
+	if (pets_spam_shown) {
+		y += 8;
+		text_draw(x, y, text_note_pets);
+	}
+	if (lab_called) {
+		y += 8;
+		text_draw(x, y, text_note_lab);
+	}
+}
 
 static u8 poll_digit()
 {
@@ -66,7 +90,7 @@ void phone_call(void)
 {
 	clear_number();
 	texture_draw_fullscreen(&texture_phone);
-	//notepad_draw();
+	notepad_draw();
 	//phone_draw_number();
 	while(number_size < 4) {
 		u8 digit = read_digit();
