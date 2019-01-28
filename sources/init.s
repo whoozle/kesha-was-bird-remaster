@@ -29,13 +29,6 @@ gsinit_next$:
 	ei
 	ret
 
-_border::
-	ld hl, #2
-	add hl, sp
-	ld a, (hl)
-	out (254), a
-	ret
-
 _sleep::
 	ld hl, #2
 	add hl, sp

@@ -98,10 +98,11 @@ generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json ${GENERATED_ROO
 
 set(SOURCES
 	sources/main.c
+	sources/init.s
+	sources/runtime.c
 	sources/audio.c
 	sources/lz4.c
 	sources/fb.c
-	sources/init.s
 	sources/tiles.c
 	sources/days.c
 	sources/texture.c
