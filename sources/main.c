@@ -5,7 +5,8 @@
 
 void ninja_fight();
 
-void main() {
+void main(void)
+{
 	gsinit();
 	//day_1();
 	//day_2();
