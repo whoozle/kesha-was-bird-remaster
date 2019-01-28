@@ -1,7 +1,9 @@
 #ifndef KESHA_AUDIO_H
 #define KESHA_AUDIO_H
 
-void audio_play_sync(void *audio);
-void audio_invalid_number();
+#include "types.h"
+
+void audio_play_sync(const u8 *audio);
+void audio_invalid_number(void);
 
 #endif
