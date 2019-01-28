@@ -87,6 +87,7 @@ generate_texture(NAME head_disabled		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/h
 generate_texture(NAME head_fish			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/fish.png)
 generate_texture(NAME head_pets			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/pets2.png)
 generate_texture(NAME head_glitch		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/glitch.png)
+generate_texture(NAME letter			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/tiles/letter.png)
 
 generate_font(NAME font					SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/font/5.font)
 

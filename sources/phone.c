@@ -139,18 +139,19 @@ void dispatch_call(void)
 	call_invalid();
 }
 
+void room_with_letter(void);
 void dispatch_event(void)
 {
 	if (!spam_spam_shown)
 	{
 		set_flag(&spam_spam_shown);
-		//room_with_letter();
+		room_with_letter();
 		dialog_spam_1();
 	}
 	else if (!pets_spam_shown)
 	{
 		set_flag(&pets_spam_shown);
-		//room_with_letter();
+		room_with_letter();
 		dialog_spam_2();
 	}
 	else
@@ -158,7 +159,7 @@ void dispatch_event(void)
 		u8 r = get_r() & 7;
 		if (r == 3)
 		{
-			//room_with_letter();
+			room_with_letter();
 			dialog_spam_1();
 		}
 	}
