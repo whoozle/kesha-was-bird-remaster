@@ -101,7 +101,14 @@ void fb_update_rect(u8 x, u8 y, u8 w, u8 h)
 	fb_update_rect_impl(fb_get_base_addr(0, (y << 1) + 32), FB_BASE_ADDR(0, y), 16, h);
 }
 
-extern void fb_clear_attrs(u8 bg)
+void fb_clear(u8 bg)
+{
+	memset(fbData, 0, sizeof(fbData));
+	memset(fbAttr, bg, sizeof(fbAttr));
+	fb_update();
+}
+
+void fb_clear_attrs(u8 bg)
 {
 	memset(VRAM_ATTRS, bg, 0x300);
 }

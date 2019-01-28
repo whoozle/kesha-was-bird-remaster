@@ -6,6 +6,7 @@
 #include "runtime.h"
 #include "audio.h"
 #include "fb.h"
+#include "font.h"
 #include "_dialogs.h"
 #include <string.h>
 
@@ -125,24 +126,66 @@ void ninja_fight(void)
 
 	// texture_draw_fullscreen(&texture_fish_army);
 	// shake_up_down();
-	 texture_draw_fullscreen(&texture_fish);
+	// texture_draw_fullscreen(&texture_fish);
 	// shake_up_down();
 
+	// {
+	// 	u8 n = 24;
+	// 	const u16 step = (u16)0x100;
+	// 	const u16 size = (u16)0x1800 - step;
+	// 	while(n--)
+	// 	{
+	// 		memmove(VRAM_ADDR, VRAM_ADDR + step, size);
+	// 		memset(VRAM_ADDR + size, 0, step);
+	// 		audio_play_sync(audio_noise);
+	// 		memmove(VRAM_ATTRS, VRAM_ATTRS + 0x20, 0x2e0);
+	// 	}
+	// }
+
+	// frame_planet(&texture_earth_1);
+	// frame_planet(&texture_earth_2);
+	// frame_planet(&texture_earth_3);
+	// frame_planet(&texture_earth_4);
+	// {
+	// 	u8 n = 40;
+	// 	while(n--)
+	// 	{
+	// 		u8 r = 192;
+	// 		u8 * data = VRAM_ADDR;
+	// 		while(r--)
+	// 		{
+	// 			memcpy(data, data + 1, 31);
+	// 			data += 31;
+	// 			*data++ = 0;
+	// 		}
+	// 		r = 24;
+	// 		data = VRAM_ATTRS;
+	// 		while(r--)
+	// 		{
+	// 			memcpy(data, data + 1, 31);
+	// 			data += 31;
+	// 			*data++ = 0;
+	// 		}
+	// 		audio_play_sync(audio_noise);
+	// 	}
+	// }
+	//sleep(60);
+	fb_clear(7);
+	text_draw(38, 30, text_the_end);
+	sleep(180);
+	font_draw_char(32 /*?*/, 89, 29);
+	audio_play_sync(audio_text_beep);
+	sleep(60);
+	u8 n = 100;
+	while(n--)
 	{
-		u8 n = 24;
-		const u16 step = (u16)0x100;
-		const u16 size = (u16)0x1800 - step;
-		while(n--)
-		{
-			memmove(VRAM_ADDR, VRAM_ADDR + step, size);
-			memset(VRAM_ADDR + size, 0, step);
-			audio_play_sync(audio_noise);
-			memmove(VRAM_ATTRS, VRAM_ATTRS + 0x20, 0x2e0);
-		}
+		u8 x = get_r() & (u8)0x7fu;
+		u8 y = get_r() & (u8)0x3fu;
+		font_draw_char(32 /*?*/, x, y);
+		audio_play_sync(audio_text_beep);
 	}
 
-	frame_planet(&texture_earth_1);
-	frame_planet(&texture_earth_2);
-	frame_planet(&texture_earth_3);
-	frame_planet(&texture_earth_4);
+	//credits
+	while(1)
+		sleep(50);
 }
