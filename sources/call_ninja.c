@@ -104,72 +104,72 @@ static void frame_planet(Texture * bg)
 
 void ninja_fight(void)
 {
-	// dialog_ninja_4();
-	// u8 key;
-	// do
-	// {
-	// 	dialog_ninja_5();
-	// 	key = read_digit();
-	// 	if (key == 1)
-	// 	{
-	// 		texture_draw_fullscreen(&texture_ninja);
-	// 		sleep(120);
-	// 		dialog_ninja_66();
-	// 	}
-	// }
-	// while(key != 2);
-	// frame(&texture_ninja_fish);
-	// frame(&texture_ninja_kesha_1);
-	// frame(&texture_ninja_kesha_2);
-	// frame(&texture_ninja_kesha_3);
-	// sleep(120);
+	dialog_ninja_4();
+	u8 key;
+	do
+	{
+		dialog_ninja_5();
+		key = read_digit();
+		if (key == 1)
+		{
+			texture_draw_fullscreen(&texture_ninja);
+			sleep(120);
+			dialog_ninja_66();
+		}
+	}
+	while(key != 2);
+	frame(&texture_ninja_fish);
+	frame(&texture_ninja_kesha_1);
+	frame(&texture_ninja_kesha_2);
+	frame(&texture_ninja_kesha_3);
+	sleep(120);
 
-	// texture_draw_fullscreen(&texture_fish_army);
-	// shake_up_down();
-	// texture_draw_fullscreen(&texture_fish);
-	// shake_up_down();
+	texture_draw_fullscreen(&texture_fish_army);
+	shake_up_down();
+	texture_draw_fullscreen(&texture_fish);
+	shake_up_down();
 
-	// {
-	// 	u8 n = 24;
-	// 	const u16 step = (u16)0x100;
-	// 	const u16 size = (u16)0x1800 - step;
-	// 	while(n--)
-	// 	{
-	// 		memmove(VRAM_ADDR, VRAM_ADDR + step, size);
-	// 		memset(VRAM_ADDR + size, 0, step);
-	// 		audio_play_sync(audio_noise);
-	// 		memmove(VRAM_ATTRS, VRAM_ATTRS + 0x20, 0x2e0);
-	// 	}
-	// }
+	{
+		u8 n = 24;
+		const u16 step = (u16)0x100;
+		const u16 size = (u16)0x1800 - step;
+		while(n--)
+		{
+			memmove(VRAM_ADDR, VRAM_ADDR + step, size);
+			memset(VRAM_ADDR + size, 0, step);
+			audio_play_sync(audio_noise);
+			memmove(VRAM_ATTRS, VRAM_ATTRS + 0x20, 0x2e0);
+		}
+	}
 
-	// frame_planet(&texture_earth_1);
-	// frame_planet(&texture_earth_2);
-	// frame_planet(&texture_earth_3);
-	// frame_planet(&texture_earth_4);
-	// {
-	// 	u8 n = 40;
-	// 	while(n--)
-	// 	{
-	// 		u8 r = 192;
-	// 		u8 * data = VRAM_ADDR;
-	// 		while(r--)
-	// 		{
-	// 			memcpy(data, data + 1, 31);
-	// 			data += 31;
-	// 			*data++ = 0;
-	// 		}
-	// 		r = 24;
-	// 		data = VRAM_ATTRS;
-	// 		while(r--)
-	// 		{
-	// 			memcpy(data, data + 1, 31);
-	// 			data += 31;
-	// 			*data++ = 0;
-	// 		}
-	// 		audio_play_sync(audio_noise);
-	// 	}
-	// }
-	//sleep(60);
+	frame_planet(&texture_earth_1);
+	frame_planet(&texture_earth_2);
+	frame_planet(&texture_earth_3);
+	frame_planet(&texture_earth_4);
+	{
+		u8 n = 40;
+		while(n--)
+		{
+			u8 r = 192;
+			u8 * data = VRAM_ADDR;
+			while(r--)
+			{
+				memcpy(data, data + 1, 31);
+				data += 31;
+				*data++ = 0;
+			}
+			r = 24;
+			data = VRAM_ATTRS;
+			while(r--)
+			{
+				memcpy(data, data + 1, 31);
+				data += 31;
+				*data++ = 0;
+			}
+			audio_play_sync(audio_noise);
+		}
+	}
+	sleep(60);
 	border(0);
 	fb_clear(7);
 	text_draw(38, 30, text_the_end);
