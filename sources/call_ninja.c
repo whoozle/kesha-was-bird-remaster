@@ -36,7 +36,7 @@ void ninja_show_eraser(void)
 
 void ninja_show_fday_device(void)
 {
-	banner_draw(&texture_fday_device, text_fday_device, 33, 54);
+	banner_draw(&texture_fday_device, text_fday_device, 30, 54);
 }
 
 void call_ninja(void)

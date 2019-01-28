@@ -7,6 +7,9 @@
 
 #include "texture_drinking.h"
 #include "texture_professor.h"
+#include "texture_galina.h"
+#include "texture_galina_pests.h"
+#include "texture_prison.h"
 
 void drinking_draw(void)
 {
@@ -17,6 +20,15 @@ void drinking_draw(void)
 void professor_show_banner(void)
 {
 	banner_draw(&texture_professor, text_professor, 58, 0);
+}
+
+static void galina_show_banner(void)
+{
+	texture_draw_fullscreen(&texture_galina_pests);
+	sleep(180);
+	banner_draw(&texture_galina, text_treachery, 2, 2);
+	texture_draw_fullscreen(&texture_prison);
+	sleep(120);
 }
 
 void call_galina(void)
@@ -43,6 +55,8 @@ void call_galina(void)
 				dialog_no_answer_1();
 			} else {
 				dialog_galina_6();
+				galina_show_banner();
+				set_flag(&pets_got_galina);
 			}
 			break;
 	}
