@@ -291,7 +291,7 @@ text('eight plus five star three', 150)
 
 dialog('ninja', 4)
 sleep(30)
-call('audio_play_sync', '&audio_click')
+call('audio_play_sync', 'audio_click')
 sleep(30)
 head(1, 'kesha')
 text('I heard a click', 120)

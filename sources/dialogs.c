@@ -8,8 +8,6 @@
 #include "vars.h"
 #include "audio.h"
 
-u8 audio_click;
-
 void room_draw(void);
 void drinking_draw(void);
 void professor_show_banner(void);
