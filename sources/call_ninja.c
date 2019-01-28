@@ -170,17 +170,23 @@ void ninja_fight(void)
 	// 	}
 	// }
 	//sleep(60);
+	border(0);
 	fb_clear(7);
 	text_draw(38, 30, text_the_end);
 	sleep(180);
 	font_draw_char(32 /*?*/, 89, 29);
 	audio_play_sync(audio_text_beep);
 	sleep(60);
+
 	u8 n = 100;
 	while(n--)
 	{
-		u8 x = get_r() & (u8)0x7fu;
-		u8 y = get_r() & (u8)0x3fu;
+		u8 x = rand() & (u8)0x7fu;
+		if (x > 124)
+			x = 124;
+		u8 y = rand() & (u8)0x3fu;
+		if (y > 58)
+			x = 58;
 		font_draw_char(32 /*?*/, x, y);
 		audio_play_sync(audio_text_beep);
 	}

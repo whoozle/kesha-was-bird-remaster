@@ -12,6 +12,7 @@ void main(void)
 	//day_2();
 	while(1)
 	{
+		srand_r();
 		phone_call();
 		dispatch_call();
 
