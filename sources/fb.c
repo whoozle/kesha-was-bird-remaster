@@ -30,15 +30,15 @@ static const u8 dup4[16] =
 //clears X, increment line number
 static u16 fb_next_line(u16 ptr)
 {
-	u8 x = (u8)ptr & 0x1fu;
+	u8 x = (u8)ptr & (u8)0x1f;
 	u8 y = ptr >> 5;
-	if ((y & 0x38u) == 0x38u)
+	if ((y & (u8)0x38) == (u8)0x38)
 	{
 		++y; //YY111111 case will increment y automatically or increment YYYYYY111
-		y &= 0xc7u; //wipe out lower 3 bits of y pos
+		y &= (u8)0xc7; //wipe out lower 3 bits of y pos
 	}
 	else
-		y += 8u;
+		y += (u8)8;
 	return (u16)0x4000u | ((u16)y << 5) | x;
 }
 
@@ -46,8 +46,8 @@ u8 * fb_get_base_addr(u8 x, u8 y)
 {
 	//0 1 0 [Y7 Y6] [Y2 Y1 Y0]    [Y5 Y4 Y3] [X4 X3 X2 X1 X0]
 	u8 y0 = y & 7;
-	u8 y1 = (y << 2) & 0xe0u;
-	u8 y2 = (y >> 3) & 0x18u;
+	u8 y1 = (y << 2) & (u8)0xe0;
+	u8 y2 = (y >> 3) & (u8)0x18;
 	return (u8 *) (((u16)(0x40 | y2 | y0) << 8) | y1 | (x >> 3));
 }
 
@@ -78,7 +78,7 @@ void fb_update_rect_impl(u8 *base, const u8 *src, u8 updateWidth, u8 updateHeigh
 		{
 			u8 srcByte = *src++;
 			*dst++ = dup4[srcByte >> 4];
-			*dst++ = dup4[srcByte & 0x0f];
+			*dst++ = dup4[srcByte & (u8)0x0f];
 		}
 		src += srcPitch;
 		u8 * next = (u8*)fb_next_line((u16)base);
@@ -94,8 +94,8 @@ void fb_update(void) {
 
 void fb_update_rect(u8 x, u8 y, u8 w, u8 h)
 {
-	u8 r = (x + w + 7) & 0xf8u; //align 8 right
-	x = x & 0xf8u; //align by 8
+	u8 r = (x + w + 7) & (u8)0xf8; //align 8 right
+	x = x & (u8)0xf8; //align by 8
 	w = r - x;
 	//fb_update_rect_impl(fb_get_base_addr(x << 1, (y << 1) + 32), FB_BASE_ADDR(x, y), w, h);
 	fb_update_rect_impl(fb_get_base_addr(0, (y << 1) + 32), FB_BASE_ADDR(0, y), 16, h);
