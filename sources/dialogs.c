@@ -20,8 +20,8 @@ void ninja_show_fday_device(void);
 void audio_play_sync(void *audio) { (void)audio; }
 void audio_invalid_number() { }
 
-void glitch_fill() { }
-void glitch_voice() { }
-void glitch_voice_next() { }
+void glitch_fill();
+void glitch_voice();
+void glitch_voice_next();
 
 #include "_dialogs.c"

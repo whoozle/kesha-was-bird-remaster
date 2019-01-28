@@ -20,3 +20,7 @@ u8 call_glitch(void)
 	else
 		return 0;
 }
+
+void glitch_fill() { }
+void glitch_voice() { }
+void glitch_voice_next() { }
