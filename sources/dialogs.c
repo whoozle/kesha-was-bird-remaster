@@ -6,6 +6,7 @@
 #include "tiles.h"
 #include "days.h"
 #include "vars.h"
+#include "audio.h"
 
 u8 audio_click;
 
@@ -16,9 +17,6 @@ void professor_show_banner(void);
 void ninja_show_banner(void);
 void ninja_show_eraser(void);
 void ninja_show_fday_device(void);
-
-void audio_play_sync(void *audio) { (void)audio; }
-void audio_invalid_number() { }
 
 void glitch_fill();
 void glitch_voice();
