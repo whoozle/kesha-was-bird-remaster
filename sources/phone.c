@@ -39,7 +39,7 @@ static void notepad_draw()
 	}
 }
 
-static u8 poll_digit()
+u8 poll_digit()
 {
 	u8 byte = Keyboard_54321 & 0x1fu;
 	if (byte != 0x1fu)
@@ -72,13 +72,7 @@ static u8 poll_digit()
 	return 0xffu;
 }
 
-static void clear_number() {
-	number_size = 0;
-	memset(number, 0xff, sizeof(number));
-	number_pos = phone_number_x;
-}
-
-static u8 read_digit() {
+u8 read_digit() {
 	u8 digit;
 	do
 	{
@@ -87,6 +81,12 @@ static u8 read_digit() {
 	while(digit == 0xff);
 	while(poll_digit() != 0xff);
 	return digit;
+}
+
+static void clear_number() {
+	number_size = 0;
+	memset(number, 0xff, sizeof(number));
+	number_pos = phone_number_x;
 }
 
 void phone_call(void)

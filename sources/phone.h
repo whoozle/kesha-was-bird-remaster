@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+u8 poll_digit(void);
+u8 read_digit(void);
 void phone_call(void);
 void dispatch_call(void);
 u8 dispatch_event(void);

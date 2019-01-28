@@ -2,6 +2,8 @@
 #include "text.h"
 #include "tiles.h"
 #include "vars.h"
+#include "phone.h"
+#include "runtime.h"
 #include "_dialogs.h"
 
 #include "texture_ninja.h"
@@ -39,4 +41,22 @@ void call_ninja(void)
 	{
 		dialog_ninja_2();
 	}
+}
+
+void ninja_fight(void)
+{
+	dialog_ninja_4();
+	u8 key;
+	do
+	{
+		dialog_ninja_5();
+		key = read_digit();
+		if (key == 1)
+		{
+			texture_draw_fullscreen(&texture_ninja);
+			sleep(120);
+			dialog_ninja_66();
+		}
+	}
+	while(key != 2);
 }
