@@ -3,19 +3,21 @@
 #include "days.h"
 #include "phone.h"
 
+void ninja_fight();
+
 void main() {
 	gsinit();
+	ninja_fight();
 	//day_1();
 	//day_2();
 	while(1)
 	{
 		phone_call();
 		dispatch_call();
-		do
-		{
-			day_increment();
-			day_intertitle();
-		} while (dispatch_event());
 
+		day_increment();
+		day_intertitle();
+
+		dispatch_event();
 	}
 }

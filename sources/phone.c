@@ -7,6 +7,7 @@
 #include "vars.h"
 #include "text.h"
 #include "calls.h"
+#include "runtime.h"
 #include <string.h>
 
 #define phone_number_x 		12
@@ -138,5 +139,27 @@ void dispatch_call(void)
 	call_invalid();
 }
 
-u8 dispatch_event(void)
-{ return 0; }
+void dispatch_event(void)
+{
+	if (!spam_spam_shown)
+	{
+		set_flag(&spam_spam_shown);
+		//room_with_letter();
+		dialog_spam_1();
+	}
+	else if (!pets_spam_shown)
+	{
+		set_flag(&pets_spam_shown);
+		//room_with_letter();
+		dialog_spam_2();
+	}
+	else
+	{
+		u8 r = get_r() & 7;
+		if (r == 3)
+		{
+			//room_with_letter();
+			dialog_spam_1();
+		}
+	}
+}
