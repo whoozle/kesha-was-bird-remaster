@@ -112,6 +112,7 @@ set(SOURCES
 	sources/call_invalid.c
 	sources/call_lab.c
 	sources/call_pets.c
+	sources/call_glitch.c
 #	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})

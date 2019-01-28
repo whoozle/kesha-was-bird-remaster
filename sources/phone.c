@@ -123,7 +123,9 @@ static const Number numbers[] =
 
 void dispatch_call(void)
 {
-	//if (check_glitch()) return;
+	if (call_glitch())
+		return;
+
 	const Number * n = numbers;
 	while(n->handler)
 	{
