@@ -7,7 +7,6 @@ void ninja_fight();
 
 void main() {
 	gsinit();
-	ninja_fight();
 	//day_1();
 	//day_2();
 	while(1)
