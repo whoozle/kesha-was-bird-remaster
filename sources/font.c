@@ -41,7 +41,7 @@ u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 
 u8 font_draw_char(char ch, u8 x, u8 y)
 {
-	if (ch >= FONT_FONT_CMIN && ch < FONT_FONT_CMAX)
+	if (ch >= FONT_FONT_CMIN && ch <= FONT_FONT_CMAX)
 	{
 		const Glyph * glyph = font_font + (ch - FONT_FONT_CMIN);
 		return font_draw_glyph(glyph, x, y);
