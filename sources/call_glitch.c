@@ -1,7 +1,7 @@
 #include "calls.h"
 #include "vars.h"
 #include "_dialogs.h"
-#include "texture_head_glitch.h";
+#include "texture_head_glitch.h"
 #include "audio.h"
 #include "runtime.h"
 
@@ -38,18 +38,13 @@ void glitch_fill()
 		if (y > 56)
 			y = 56;
 		texture_glitch.height = rand() & 8;
-		texture_glitch.data = rand() & 0x1fff;
+		texture_glitch.data = (u8 *)(rand() & 0x1fff);
 		texture_draw(&texture_glitch, x, y);
 		audio_play_sync(audio_text_beep);
 	}
 }
 
 static const u8 *voice;
-void glitch_voice()
-{
-	voice = 0; //play ZX ROM
-	glitch_voice_next();
-}
 
 void glitch_voice_next()
 {
@@ -59,4 +54,10 @@ void glitch_voice_next()
 		audio_play_sync(voice);
 		voice += 16;
 	}
+}
+
+void glitch_voice()
+{
+	voice = 0; //play ZX ROM
+	glitch_voice_next();
 }
