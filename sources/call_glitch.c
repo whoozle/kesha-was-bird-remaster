@@ -1,6 +1,9 @@
 #include "calls.h"
 #include "vars.h"
 #include "_dialogs.h"
+#include "texture_head_glitch.h";
+#include "audio.h"
+#include "runtime.h"
 
 u8 call_glitch(void)
 {
@@ -21,6 +24,35 @@ u8 call_glitch(void)
 		return 0;
 }
 
-void glitch_fill() { }
-void glitch_voice() { }
-void glitch_voice_next() { }
+static Texture texture_glitch = { 8, 8, 0, 0 };
+
+void glitch_fill()
+{
+	u8 n = 90;
+	while(n--)
+	{
+		u8 x = rand() & 0x7f;
+		u8 y = rand() & 0x3f;
+		texture_glitch.height = rand() & 8;
+		texture_glitch.data = rand() & 0x1fff;
+		texture_draw(&texture_glitch, x, y);
+		audio_play_sync(audio_text_beep);
+	}
+}
+
+static const u8 *voice;
+void glitch_voice()
+{
+	voice = 0; //play ZX ROM
+	glitch_voice_next();
+}
+
+void glitch_voice_next()
+{
+	u8 n = 60;
+	while(n--)
+	{
+		audio_play_sync(voice);
+		voice += 16;
+	}
+}
