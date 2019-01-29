@@ -16,5 +16,6 @@ typedef struct Glyph Glyph;
 u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y);
 u8 font_draw_char(char ch, u8 x, u8 y);
 u8 text_draw(u8 x, u8 y, u8 textId);
+u8 text_draw_ns(u8 x, u8 y, u8 textId);
 
 #endif

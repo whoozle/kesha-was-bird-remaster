@@ -21,22 +21,22 @@ static u8 number_pos = phone_number_x;
 static void notepad_draw()
 {
 	u8 x = 64, y = 10;
-	text_draw(x, y, text_note_galya);
+	text_draw_ns(x, y, text_note_galya);
 	if (galina_calls >= 3) {
 		y += 8;
-		text_draw(x, y, text_note_ninja);
+		text_draw_ns(x, y, text_note_ninja);
 	}
 	if (spam_spam_shown) {
 		y += 8;
-		text_draw(x, y, text_note_spam);
+		text_draw_ns(x, y, text_note_spam);
 	}
 	if (pets_spam_shown) {
 		y += 8;
-		text_draw(x, y, text_note_pets);
+		text_draw_ns(x, y, text_note_pets);
 	}
 	if (lab_called) {
 		y += 8;
-		text_draw(x, y, text_note_lab);
+		text_draw_ns(x, y, text_note_lab);
 	}
 }
 

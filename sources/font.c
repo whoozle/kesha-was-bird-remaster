@@ -3,6 +3,7 @@
 #include "text.h"
 #include "font_font.h"
 #include <string.h>
+#include "audio.h"
 
 u8 font_draw_glyph(const Glyph *glyph, u8 x, u8 y)
 {
@@ -49,7 +50,7 @@ u8 font_draw_char(char ch, u8 x, u8 y)
 		return 0;
 }
 
-u8 text_draw(u8 x, u8 y, u8 textId)
+u8 text_draw_impl(u8 x, u8 y, u8 textId, u8 audio)
 {
 	const u8 * text = text_index[textId];
 	u8 cx = x;
@@ -74,6 +75,14 @@ u8 text_draw(u8 x, u8 y, u8 textId)
 				w = FONT_FONT_SPACE_WIDTH;
 		}
 		cx += w;
+		if (audio)
+			audio_play_sync(audio_text_beep);
 	}
 	return cx;
 }
+
+u8 text_draw(u8 x, u8 y, u8 text_id)
+{ return text_draw_impl(x, y, text_id, 1); }
+
+u8 text_draw_ns(u8 x, u8 y, u8 text_id)
+{ return text_draw_impl(x, y, text_id, 0); }
