@@ -26,7 +26,7 @@ void day_1(void)
 
 void day_2(void)
 {
-	//room_with_letter();
+	room_with_letter();
 	dialog_galina_1();
 	sleep(50);
 	day_next();
