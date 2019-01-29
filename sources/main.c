@@ -8,8 +8,11 @@ void ninja_fight();
 void main(void)
 {
 	gsinit();
-	//day_1();
-	//day_2();
+
+	//splash + music here
+
+	day_1();
+	day_2();
 	while(1)
 	{
 		srand_r();

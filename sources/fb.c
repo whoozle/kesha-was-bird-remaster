@@ -1,4 +1,5 @@
 #include "fb.h"
+#include "runtime.h"
 #include <string.h>
 
 u8 fbData[128 * 64 / 8];
@@ -108,6 +109,7 @@ void fb_update_rect(u8 x, u8 y, u8 w, u8 h)
 
 void fb_clear(u8 bg)
 {
+	border(bg >> 3);
 	memset(fbData, 0, sizeof(fbData));
 	memset(fbAttr, bg, sizeof(fbAttr));
 	fb_update();

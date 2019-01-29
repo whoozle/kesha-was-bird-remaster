@@ -15,6 +15,11 @@ void day_next() {
 
 void day_1(void)
 {
+	fb_clear(7);
+	sleep(120);
+	text_draw(31, 30, text_title);
+	sleep(120);
+
 	dialog_kesha_1();
 	day_next();
 }
