@@ -32,7 +32,11 @@ void glitch_fill()
 	while(n--)
 	{
 		u8 x = rand() & 0x7f;
+		if (x > 120)
+			x = 120;
 		u8 y = rand() & 0x3f;
+		if (y > 56)
+			y = 56;
 		texture_glitch.height = rand() & 8;
 		texture_glitch.data = rand() & 0x1fff;
 		texture_draw(&texture_glitch, x, y);
