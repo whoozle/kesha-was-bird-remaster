@@ -4,6 +4,7 @@
 #include "font.h"
 #include "runtime.h"
 #include "texture_letter.h"
+#include <string.h>
 
 #include "texture_frame.h"
 #include "texture_room.h"
@@ -17,7 +18,23 @@ void banner_draw(Texture *banner, u8 text_id, u8 text_x, u8 text_y)
 {
 	texture_draw_fullscreen(banner);
 	sleep(50);
-	text_draw(text_x, text_y, text_id);
+	u8 b = text_y & (u8)0xf8u;
+	if (b > 56)
+		b = 56;
+
+	u8 e = b + 8;
+
+	for(u8 i = b; i < e; ++i)
+	{
+		u8 * addr = FB_BASE_ADDR(0, i);
+		memset(addr, 0, 16);
+		fb_update_rect(0, i, 16, 1);
+		sleep(2);
+	}
+
+	memset(fbAttr + FB_ATTR_OFFSET(0, b >> 2), 7, 64);
+	fb_update_attrs();
+	text_draw(text_x, b + 2, text_id);
 	sleep(200);
 }
 

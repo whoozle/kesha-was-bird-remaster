@@ -13,13 +13,13 @@
 
 void drinking_draw(void)
 {
-	texture_draw_fullscreen(&texture_drinking);
+	banner_draw(&texture_drinking, text_kesha, 20, 50);
 	sleep(90);
 }
 
 void professor_show_banner(void)
 {
-	banner_draw(&texture_professor, text_professor, 58, 0);
+	banner_draw(&texture_professor, text_professor, 55, 50);
 }
 
 static void galina_show_banner(void)

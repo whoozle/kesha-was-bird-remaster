@@ -87,8 +87,13 @@ void fb_update_rect_impl(u8 *base, const u8 *src, u8 updateWidth, u8 updateHeigh
 	}
 }
 
-void fb_update(void) {
+void fb_update_attrs(void)
+{
 	memcpy(VRAM_ATTRS + 0x80, fbAttr, 32 * 16);
+}
+
+void fb_update(void) {
+	fb_update_attrs();
 	fb_update_rect_impl(VRAM_ADDR + 0x80, fbData, 16, 64);
 }
 

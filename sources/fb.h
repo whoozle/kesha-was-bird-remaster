@@ -17,6 +17,7 @@ extern u8 fbData[128 * 64 / 8];
 extern u8 fbAttr[32 * 16];
 
 void fb_update(void);
+void fb_update_attrs(void);
 void fb_update_rect(u8 x, u8 y, u8 w, u8 h);
 void fb_clear(u8 bg);
 void fb_clear_attrs(u8 bg);
