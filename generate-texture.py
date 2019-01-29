@@ -52,7 +52,6 @@ for ty in xrange(ny):
 				stats[v] = stats.setdefault(v, 0) + 1
 		stats = stats.items()
 		stats.sort(key=operator.itemgetter(1), reverse=True)
-		stats = stats[:2]
 		if len(stats) >= 3:
 			bg, fg, fg2 = stats[0][0], stats[1][0], stats[2][0]
 			attr = (palette[bg] << 3) | palette[fg]
