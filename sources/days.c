@@ -16,9 +16,9 @@ void day_next() {
 void day_1(void)
 {
 	fb_clear(7);
-	sleep(120);
+	sleep(100);
 	text_draw(31, 30, text_title);
-	sleep(120);
+	sleep(100);
 
 	dialog_kesha_1();
 	day_next();
@@ -28,7 +28,7 @@ void day_2(void)
 {
 	//room_with_letter();
 	dialog_galina_1();
-	sleep(60);
+	sleep(50);
 	day_next();
 }
 
@@ -42,7 +42,7 @@ void day_intertitle(void)
 	if (day_number[0] || day_number[1])
 		x += font_draw_char('0' - CHAR_MIN + day_number[1], x, y);
 	x += font_draw_char('0' - CHAR_MIN + day_number[2], x, y);
-	sleep(180); //intertitle_delay
+	sleep(150); //intertitle_delay
 }
 
 void day_increment(void)

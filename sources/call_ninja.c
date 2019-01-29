@@ -67,7 +67,7 @@ static void frame(Texture * bg)
 {
 	texture_draw_fullscreen(bg);
 	ninja_sword();
-	sleep(60);
+	sleep(50);
 }
 
 void shake_up_down()
@@ -113,7 +113,7 @@ void ninja_fight(void)
 		if (key == 1)
 		{
 			texture_draw_fullscreen(&texture_ninja);
-			sleep(120);
+			sleep(100);
 			dialog_ninja_66();
 		}
 	}
@@ -122,7 +122,7 @@ void ninja_fight(void)
 	frame(&texture_ninja_kesha_1);
 	frame(&texture_ninja_kesha_2);
 	frame(&texture_ninja_kesha_3);
-	sleep(120);
+	sleep(100);
 
 	texture_draw_fullscreen(&texture_fish_army);
 	shake_up_down();
@@ -169,14 +169,14 @@ void ninja_fight(void)
 			audio_play_sync(audio_noise);
 		}
 	}
-	sleep(60);
+	sleep(50);
 	border(0);
 	fb_clear(7);
 	text_draw(38, 30, text_the_end);
-	sleep(180);
+	sleep(150);
 	font_draw_char(32 /*?*/, 89, 29);
 	audio_play_sync(audio_text_beep);
-	sleep(60);
+	sleep(50);
 
 	u8 n = 100;
 	while(n--)

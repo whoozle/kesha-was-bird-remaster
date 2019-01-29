@@ -14,7 +14,7 @@
 void drinking_draw(void)
 {
 	banner_draw(&texture_drinking, text_kesha, 20, 50);
-	sleep(90);
+	sleep(75);
 }
 
 void professor_show_banner(void)
@@ -25,10 +25,10 @@ void professor_show_banner(void)
 static void galina_show_banner(void)
 {
 	texture_draw_fullscreen(&texture_galina_pests);
-	sleep(180);
+	sleep(150);
 	banner_draw(&texture_galina, text_treachery, 2, 2);
 	texture_draw_fullscreen(&texture_prison);
-	sleep(120);
+	sleep(100);
 }
 
 void call_galina(void)

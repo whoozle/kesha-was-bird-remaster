@@ -57,5 +57,5 @@ void room_with_letter(void)
 		texture_draw(&texture_letter, x, y);
 		y += 2;
 	}
-	sleep(90);
+	sleep(75);
 }
