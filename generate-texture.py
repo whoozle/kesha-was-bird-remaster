@@ -23,7 +23,7 @@ tw, th = 4, 4
 nx = (w + tw - 1) // tw
 ny = (h + th - 1) // th
 data = bytearray([0] * ((tw * th * nx * ny) >> 3))
-attrs = bytearray([0] * (nx * ny))
+attrs = bytearray([0] * (nx * ny)) if not args.monochrome else bytearray()
 palette = map(int, args.palette)
 
 def get_pixel(x, y):
@@ -53,6 +53,7 @@ for ty in xrange(ny):
 				stats[v] = stats.setdefault(v, 0) + 1
 		stats = stats.items()
 		stats.sort(key=operator.itemgetter(1), reverse=True)
+
 		if len(stats) >= 3:
 			bg, fg, fg2 = stats[0][0], stats[1][0], stats[2][0]
 			attr = (palette[bg] << 3) | palette[fg]
@@ -63,17 +64,26 @@ for ty in xrange(ny):
 			bg, fg, fg2 = stats[0][0], 99, 99
 			attr = (palette[bg] << 3)
 
-		attrs[ty * nx + tx] = attr
+		if args.monochrome:
+			for yb in xrange(th):
+				y = basey + yb
+				for xb in xrange(tw):
+					x = basex + xb
+					v = get_pixel(x, y)
+					if fg == v or (fg2 == v and ((x + y) & 1)):
+						set_pixel(x, y)
+		else:
+			attrs[ty * nx + tx] = attr
 
-		for yb in xrange(th):
-			y = basey + yb
-			for xb in xrange(tw):
-				x = basex + xb
-				v = get_pixel(x, y)
-				if fg == v or fg2 == v:
-					set_pixel(x, y)
-				elif bg != v:
-					set_pixel(x, y)
+			for yb in xrange(th):
+				y = basey + yb
+				for xb in xrange(tw):
+					x = basex + xb
+					v = get_pixel(x, y)
+					if fg == v or fg2 == v:
+						set_pixel(x, y)
+					elif bg != v:
+						set_pixel(x, y)
 
 header, source = [], []
 header.append("#ifndef TEXTURE_%s_H" %args.name.upper())
@@ -96,7 +106,7 @@ def compress(data, attrs, compression = None):
 	elif compression == 'lz4':
 		from lz4.block import compress
 		compressed_data = bytearray(compress(data, mode='high_compression', compression=12))
-		compressed_attrs = bytearray(compress(attrs, mode='high_compression', compression=12))
+		compressed_attrs = bytearray(compress(attrs, mode='high_compression', compression=12)) if attrs else bytearray()
 	else:
 		raise Exception("unknown compression %s" %args.algorithm)
 
@@ -117,15 +127,16 @@ if args.compress:
 data, attrs, compressed = compress(data, attrs, compression)
 hexdata = ", ".join(map(hex, data))
 source.append("static const u8 data[] = {%s};" %(hexdata))
-hexdata = ", ".join(map(hex, attrs))
-source.append("static const u8 attrs[] = {%s};" %(hexdata))
+if attrs:
+	hexdata = ", ".join(map(hex, attrs))
+	source.append("static const u8 attrs[] = {%s};" %(hexdata))
 
 header.append('')
 header.append("#endif")
 
 header.append('')
 source.append('')
-source.append('const Texture texture_%s = { %d, %d, data, attrs, %d, %d };' %(args.name, w, h, palette[0], 1 if compressed else 0 ))
+source.append('const Texture texture_%s = { %d, %d, data, %s, %d, %d };' %(args.name, w, h, "attrs" if attrs else 0, palette[0], 1 if compressed else 0 ))
 source.append('')
 
 with open("texture_%s.h" %args.name, "wt") as f:
