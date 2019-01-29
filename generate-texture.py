@@ -12,6 +12,7 @@ parser.add_argument('--background', '-b', help='background-color', default=0, ty
 parser.add_argument('--compress', '-c', action='store_true', help='compress bitmap with lz4 algorithm')
 parser.add_argument('--algorithm', '-A', type=str, help='select algo', default='lz4')
 parser.add_argument('--palette', '-p', nargs='+', help='palette')
+parser.add_argument('--monochrome', '-m', action='store_true', help='do not generate attrs')
 args = parser.parse_args()
 
 tex = png.Reader(args.source)

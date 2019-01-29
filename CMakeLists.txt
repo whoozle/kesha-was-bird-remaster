@@ -11,14 +11,14 @@ set(PALETTE 0 6 2 7)
 include_directories(${GENERATED_ROOT} sources)
 
 macro(generate_texture)
-	cmake_parse_arguments(_GT "" "NAME;SOURCE" "PALETTE" ${ARGN})
+	cmake_parse_arguments(_GT "" "NAME;SOURCE" "PALETTE;OPTIONS" ${ARGN})
 	if ("X${_GT_PALETTE}" STREQUAL "X")
 		set(_GT_PALETTE "${PALETTE}")
 	endif()
 
 	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/texture_${_GT_NAME}.c)
 	add_custom_command(OUTPUT ${GENERATED_ROOT}/texture_${_GT_NAME}.c ${GENERATED_ROOT}/texture_${_GT_NAME}.h
-		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py -c ${_GT_SOURCE} ${_GT_NAME} -p ${_GT_PALETTE}
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py -c ${_GT_SOURCE} ${_GT_NAME} ${_GT_OPTIONS} -p ${_GT_PALETTE}
 		WORKING_DIRECTORY ${GENERATED_ROOT}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${_GT_SOURCE}
 	)
@@ -75,19 +75,19 @@ generate_texture(NAME prison			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pic
 generate_texture(NAME professor			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/professor.png)
 generate_texture(NAME room				SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/room.png PALETTE 7 1 2 0)
 
-generate_texture(NAME head_kesha		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2.png)
-generate_texture(NAME head_kesha_o		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2_open.png)
-generate_texture(NAME head_kesha_e		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2_excited.png)
-generate_texture(NAME head_cow			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/squirrel_2.png)
-generate_texture(NAME head_professor	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/professor2.png)
-generate_texture(NAME head_ninja		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/ninja2.png)
-generate_texture(NAME head_ninja_kesha	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/ninja_kesha.png)
-generate_texture(NAME head_lab			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/lab.png)
-generate_texture(NAME head_disabled		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/disabled.png)
-generate_texture(NAME head_fish			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/fish.png)
-generate_texture(NAME head_pets			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/pets2.png)
-generate_texture(NAME head_glitch		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/glitch.png)
-generate_texture(NAME letter			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/tiles/letter.png)
+generate_texture(NAME head_kesha		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2.png OPTIONS -m)
+generate_texture(NAME head_kesha_o		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2_open.png OPTIONS -m)
+generate_texture(NAME head_kesha_e		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/kesha_v2_excited.png OPTIONS -m)
+generate_texture(NAME head_cow			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/squirrel_2.png OPTIONS -m)
+generate_texture(NAME head_professor	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/professor2.png OPTIONS -m)
+generate_texture(NAME head_ninja		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/ninja2.png OPTIONS -m)
+generate_texture(NAME head_ninja_kesha	SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/ninja_kesha.png OPTIONS -m)
+generate_texture(NAME head_lab			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/lab.png OPTIONS -m)
+generate_texture(NAME head_disabled		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/disabled.png OPTIONS -m)
+generate_texture(NAME head_fish			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/fish.png OPTIONS -m)
+generate_texture(NAME head_pets			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/pets2.png OPTIONS -m)
+generate_texture(NAME head_glitch		SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/heads/glitch.png OPTIONS -m)
+generate_texture(NAME letter			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/tiles/letter.png OPTIONS -m)
 
 generate_font(NAME font					SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/font/5.font)
 
