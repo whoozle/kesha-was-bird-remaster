@@ -1,5 +1,6 @@
 #include "audio.h"
 #include "runtime.h"
+#include "keyboard.h"
 
 const u8 audio_text_beep[16] 	= { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC };
 const u8 audio_click[16] 		= { 0x02, 0xCD, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -11,6 +12,9 @@ const u8 audio_sword_2[16] 		= { 0xc4, 0x0e, 0x02, 0x32, 0x04, 0x03, 0x81, 0x90,
 
 static void audio_play_sync_impl(const u8 *audio, u8 disco)
 {
+	u8 keys = Keyboard_BNMSymSpace;
+	if (!(keys & 1))
+		return;
 	u8 size = 16;
 	while(size--)
 	{
@@ -42,6 +46,9 @@ void audio_play_music(const u16 *indices, const u8 *data)
 			if (offset == 0xffffu)
 				break;
 			audio_play_sync_impl(data + offset, 1);
+			u8 keys = Keyboard_BNMSymSpace;
+			if (!(keys & 1))
+				return;
 		}
 	}
 }
