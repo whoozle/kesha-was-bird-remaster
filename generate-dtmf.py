@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 FREQ = 4000
 from math import sin, pi, floor
@@ -8,8 +8,6 @@ def osc(t, freq):
 
 def pulse(freq):
 	buf = []
-	byte = 0
-	bit = 0
 	for i in xrange(0, 128):
 		v = osc(i * 1.0 / FREQ, freq)
 		buf.append(v)
@@ -34,6 +32,7 @@ mapping = (
 )
 
 def generate(tone):
+	data = []
 	byte = 0
 	bit = 0
 	qe = 0
@@ -48,21 +47,24 @@ def generate(tone):
 
 		bit += 1
 		if bit == 8:
-			print "0x%02x" %byte,
+			data.append("0x%02x" %byte)
 			bit = 0
 			byte = 0
-	print
+	return ", ".join(data)
 
-print ": audio_phone_tones"
+print("#include \"types.h\"\n\nconst u8 audio_phone_tones[20][16] = {\n{"),
+tones = []
 for row in xrange(0, 4):
 	for col in xrange(0, 4):
 		idx = row * 4 + col
 		#print row, col, mapping[idx]
 		tone = mix(rows[row], cols[col])
 		#print tone
-		generate(tone)
+		tones.append(generate(tone))
 
 for tone in rosit: #16, 17, 18
-	generate(tone)
+	tones.append(generate(tone))
 
-generate(dial_tone) #19
+tones.append(generate(dial_tone)) #19
+print "}, {".join(tones)
+print "}};"

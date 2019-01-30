@@ -64,6 +64,16 @@ macro(generate_audio)
 	)
 endmacro()
 
+macro(generate_dtmf)
+	#cmake_parse_arguments(_GT "" "" "" ${ARGN})
+	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/audio_dtmf.c)
+	add_custom_command(
+		OUTPUT ${GENERATED_ROOT}/audio_dtmf.c
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-dtmf.py > ${GENERATED_ROOT}/audio_dtmf.c
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-dtmf.py
+	)
+endmacro()
+
 generate_texture(NAME drinking			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/drinking.png OPTIONS -c PALETTE 0 1 5 1)
 generate_texture(NAME earth_1			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth.png	OPTIONS -c PALETTE 0 6 5 7)
 generate_texture(NAME earth_2			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth_2.png	OPTIONS -c PALETTE 0 6 5 7)
@@ -107,7 +117,7 @@ generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json ${GENERATED_ROO
 
 generate_audio(SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds/track3.wav NAME theme OPTIONS -l10)
 
-#generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json)
+generate_dtmf()
 
 set(SOURCES
 	sources/main.c
@@ -129,7 +139,6 @@ set(SOURCES
 	sources/call_lab.c
 	sources/call_pets.c
 	sources/call_glitch.c
-#	sources/fb_fast.s
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
 

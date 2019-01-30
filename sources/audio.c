@@ -1,6 +1,7 @@
 #include "audio.h"
 #include "runtime.h"
 #include "keyboard.h"
+#include "types.h"
 
 const u8 audio_text_beep[16] 	= { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC };
 const u8 audio_click[16] 		= { 0x02, 0xCD, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -53,5 +54,18 @@ void audio_play_music(const u16 *indices, const u8 *data)
 	}
 }
 
+extern u8 audio_phone_tones[20][16];
+
+void audio_play_dtmf(u8 index, u8 n)
+{
+	while(n--)
+		audio_play_sync(audio_phone_tones[index]);
+}
+
 void audio_invalid_number(void)
-{ }
+{
+	audio_play_dtmf(16, 13);
+	audio_play_dtmf(17, 13);
+	audio_play_dtmf(18, 19);
+	sleep(25);
+}
