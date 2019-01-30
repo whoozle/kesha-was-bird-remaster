@@ -2,7 +2,8 @@ project(kesha C ASM)
 cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --opt-code-size --peep-asm --peep-return --no-xinit-opt --reserve-regs-iy")
-set(CMAKE_EXE_LINKER_FLAGS "--code-loc 0x6000 --data-loc 0xf000 --no-xinit-opt")
+set(PC_ADDR 23800)
+set(CMAKE_EXE_LINKER_FLAGS "--code-loc ${PC_ADDR} --data-loc 0xf600 --no-xinit-opt")
 
 set(GENERATED_ROOT ${CMAKE_CURRENT_BINARY_DIR}/generated)
 file(MAKE_DIRECTORY ${GENERATED_ROOT})
@@ -120,4 +121,4 @@ set(SOURCES
 )
 add_executable(kesha ${SOURCES} ${GENERATED_SOURCES})
 
-add_custom_command(TARGET kesha POST_BUILD COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ihx-to-z80.py $<TARGET_FILE:kesha> ${CMAKE_CURRENT_BINARY_DIR}/kesha.z80)
+add_custom_command(TARGET kesha POST_BUILD COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/ihx-to-z80.py $<TARGET_FILE:kesha> ${CMAKE_CURRENT_BINARY_DIR}/kesha.z80 ${PC_ADDR})

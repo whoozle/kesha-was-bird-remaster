@@ -13,8 +13,6 @@ TYPE_START_LA	= 0x05
 RAM_START	= 0x4000
 RAM_SIZE	= 0xc000
 
-PC			= 0x6000
-
 class Image(object):
 	def __init__(self):
 		self.ram = bytearray([0] * RAM_SIZE)
@@ -44,11 +42,11 @@ class Image(object):
 			begin, end = addr - RAM_START, addr + size - RAM_START
 			self.ram[begin:end] = data
 
-	def save(self):
+	def save(self, pc):
 		header = struct.pack('<HHHHHBBBHHHHHHHBBB',
 		0, #AF
 		0, 0, #bc, hl
-		PC,
+		pc,
 		0xfff8, #sp
 		0, #I
 		0, #refresh
@@ -64,6 +62,7 @@ class Image(object):
 parser = argparse.ArgumentParser(description='Converts from ihx to sna')
 parser.add_argument('source', help='input file')
 parser.add_argument('destination', help='output file (sna)')
+parser.add_argument('pc', help='pc', type=int)
 args = parser.parse_args()
 
 image = Image()
@@ -71,4 +70,4 @@ with open(args.source) as f:
 	image.load(f.read())
 
 with open(args.destination, 'wb') as f:
-	f.write(image.save())
+	f.write(image.save(args.pc))
