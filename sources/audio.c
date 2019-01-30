@@ -21,7 +21,7 @@ void audio_play_sync(const u8 *audio)
 			speaker(byte & 0x80u);
 
 			byte <<= 1;
-			u8 delay = 7;
+			u8 delay = 9;
 			while(delay--);
 		}
 	}
