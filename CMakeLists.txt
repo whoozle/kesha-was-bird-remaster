@@ -54,6 +54,16 @@ macro(generate_dialogs)
 	)
 endmacro()
 
+macro(generate_audio)
+	cmake_parse_arguments(_GT "" "NAME;SOURCE" "OPTIONS" ${ARGN})
+	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/audio_${_GT_NAME}.c)
+	add_custom_command(OUTPUT ${GENERATED_ROOT}/audio_${_GT_NAME}.c ${GENERATED_ROOT}/audio_${_GT_NAME}.h
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-audio.py ${_GT_SOURCE} ${_GT_NAME} ${GENERATED_ROOT} ${_GT_OPTIONS}
+		WORKING_DIRECTORY ${GENERATED_ROOT}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-audio.py ${_GT_SOURCE}
+	)
+endmacro()
+
 generate_texture(NAME drinking			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/drinking.png OPTIONS -c PALETTE 0 1 5 1)
 generate_texture(NAME earth_1			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth.png	OPTIONS -c PALETTE 0 6 5 7)
 generate_texture(NAME earth_2			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth_2.png	OPTIONS -c PALETTE 0 6 5 7)
@@ -94,6 +104,8 @@ generate_font(NAME font					SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/font/5.fon
 
 generate_dialogs()
 generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json ${GENERATED_ROOT}/dialogs.json)
+
+generate_audio(SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds/track3.wav NAME theme OPTIONS -l10)
 
 #generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json)
 

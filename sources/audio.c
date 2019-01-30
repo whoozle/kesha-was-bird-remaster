@@ -29,3 +29,18 @@ void audio_play_sync(const u8 *audio)
 
 void audio_invalid_number(void)
 { }
+
+void audio_play_music(const u16 *indices, const u8 *data)
+{
+	while(1)
+	{
+		u16 index = 0;
+		while(1)
+		{
+			u16 offset = indices[index++];
+			if (offset == 0xffffu)
+				break;
+			audio_play_sync(data + offset);
+		}
+	}
+}

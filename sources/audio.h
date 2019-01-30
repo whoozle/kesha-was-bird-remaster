@@ -5,6 +5,7 @@
 
 void audio_play_sync(const u8 *audio);
 void audio_invalid_number(void);
+void audio_play_music(const u16 *indices, const u8 *data);
 
 extern const u8 audio_text_beep[16];
 extern const u8 audio_click[16];

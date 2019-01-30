@@ -6,10 +6,12 @@ import argparse
 import wave
 import struct
 import sys
+import os.path
 
 parser = argparse.ArgumentParser(description='Convert audio.')
 parser.add_argument('source', help='input file')
 parser.add_argument('name', help='name')
+parser.add_argument('destination', help='destination directory')
 parser.add_argument('-e', '--encoding', help = 'encoder : [pdm|pwd]', default='pwm')
 parser.add_argument('-c', '--cutoff', help = 'cutoff value', default=0.1, type=float)
 parser.add_argument('-o', '--output', help = 'dump audio as wav file')
@@ -153,7 +155,26 @@ index += '\t0xffffu\n'
 
 size /= 16 #loop count
 
-print ("const u16 audio_%s_index[] = {\n%s\n};\n%s"  %(args.name, index, source))
+with open(os.path.join(args.destination, "audio_%s.h" %args.name), "wt") as f:
+	f.write("""\
+#ifndef _AUDIO_{uname}_H
+#define _AUDIO_{uname}_H
+
+#include "types.h"
+
+extern const u16 audio_{name}_index[];
+extern const u8 audio_{name}_data[];
+
+#endif
+""".format(name = args.name, uname = args.name.upper()))
+
+with open(os.path.join(args.destination, "audio_%s.c" %args.name), "wt") as f:
+	f.write("""\
+#include "audio_%s.h"
+const u16 audio_%s_index[] = {
+%s
+};
+%s"""  %(args.name, args.name, index, source))
 
 if args.output:
 	out = wave.open(args.output, 'w')
