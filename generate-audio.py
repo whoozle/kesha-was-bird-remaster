@@ -9,15 +9,12 @@ import sys
 
 parser = argparse.ArgumentParser(description='Convert audio.')
 parser.add_argument('source', help='input file')
-parser.add_argument('address', help='address to load from')
 parser.add_argument('name', help='name')
 parser.add_argument('-e', '--encoding', help = 'encoder : [pdm|pwd]', default='pwm')
 parser.add_argument('-c', '--cutoff', help = 'cutoff value', default=0.1, type=float)
 parser.add_argument('-o', '--output', help = 'dump audio as wav file')
 parser.add_argument('-l', '--level', type = int, default = 0, help = 'compression level')
 args = parser.parse_args()
-
-addr = int(args.address, 16)
 
 wav = wave.open(args.source)
 n = wav.getnframes()
@@ -137,7 +134,7 @@ def compress(data):
 data, offsets = compress(data)
 
 source, index = '', ''
-source += ": audio_%s\n" %args.name
+source += "const u8 audio_%s_data[] = {\n" %args.name
 
 for idx, byte in enumerate(data):
 	mask = idx & 0x0f
@@ -145,24 +142,18 @@ for idx, byte in enumerate(data):
 		source += '\t'
 	source += '0x%02x' %byte
 	if mask == 15:
-		source += '\n'
+		source += ',\n'
 	else:
-		source += ' '
+		source += ', '
+source += "};\n"
 
 for offset in offsets:
-	offset += addr + (len(offsets) * 2) + 2
-	h, l = (offset >> 8), offset & 0xff
-	if h >= 0x100:
-		raise Exception('offset is out of 64k')
-	index += '\t0x%02x 0x%02x\n' %(h, l)
-index += '\t0xff 0xff\n'
+	index += "\t0x%04x," %offset
+index += '\t0xffffu\n'
 
 size /= 16 #loop count
-print (":org 0x%04x\n" %addr)
-print (":const audio_%s_hi 0x%02x" %(args.name, addr >> 8))
-print (":const audio_%s_lo 0x%02x\n" %(args.name, addr & 0xff))
 
-print (": audio_%s_index\n%s\n%s"  %(args.name, index, source))
+print ("const u16 audio_%s_index[] = {\n%s\n};\n%s"  %(args.name, index, source))
 
 if args.output:
 	out = wave.open(args.output, 'w')
