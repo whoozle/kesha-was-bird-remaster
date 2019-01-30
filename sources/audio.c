@@ -9,13 +9,15 @@ const u8 audio_noise[16] 		= { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0
 const u8 audio_sword_1[16] 		= { 0x07, 0xe0, 0x64, 0x3f, 0x80, 0x4c, 0xe0, 0x01, 0x0c, 0xe0, 0x7e, 0x8c, 0xf8, 0x00, 0xe3, 0x01 };
 const u8 audio_sword_2[16] 		= { 0xc4, 0x0e, 0x02, 0x32, 0x04, 0x03, 0x81, 0x90, 0x1e, 0x70, 0x01, 0xc0, 0x32, 0x0c, 0x60, 0x02 };
 
-void audio_play_sync(const u8 *audio)
+static void audio_play_sync_impl(const u8 *audio, u8 disco)
 {
 	u8 size = 16;
 	while(size--)
 	{
 		u8 byte = *audio++;
 		u8 bits = 8;
+		if (disco)
+			border(byte);
 		while(bits--)
 		{
 			speaker(byte & 0x80u);
@@ -26,9 +28,8 @@ void audio_play_sync(const u8 *audio)
 		}
 	}
 }
-
-void audio_invalid_number(void)
-{ }
+void audio_play_sync(const u8 *audio)
+{ audio_play_sync_impl(audio, 0); }
 
 void audio_play_music(const u16 *indices, const u8 *data)
 {
@@ -40,7 +41,10 @@ void audio_play_music(const u16 *indices, const u8 *data)
 			u16 offset = indices[index++];
 			if (offset == 0xffffu)
 				break;
-			audio_play_sync(data + offset);
+			audio_play_sync_impl(data + offset, 1);
 		}
 	}
 }
+
+void audio_invalid_number(void)
+{ }

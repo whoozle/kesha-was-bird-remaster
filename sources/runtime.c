@@ -5,7 +5,7 @@ static __sfr __at 0xfe PortFE;
 
 void border(u8 colour)
 {
-	_last_value = (_last_value & (u8)0xf8) | colour;
+	_last_value = (_last_value & (u8)0xf8) | (colour & 7);
 	PortFE = _last_value;
 }
 
