@@ -5,6 +5,8 @@
 #include "_dialogs.h"
 #include "text.h"
 #include "runtime.h"
+#include "audio.h"
+#include "audio_theme.h"
 
 static u8 day_number[3] = { 0, 0, 1 };
 
@@ -15,6 +17,8 @@ void day_next() {
 
 void day_1(void)
 {
+	audio_play_music(audio_theme_index, audio_theme_data);
+
 	fb_clear(7);
 	sleep(100);
 	text_draw(31, 30, text_title);
