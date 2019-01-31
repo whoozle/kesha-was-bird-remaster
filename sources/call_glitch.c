@@ -4,6 +4,14 @@
 #include "texture_head_glitch.h"
 #include "audio.h"
 #include "runtime.h"
+#include "fb.h"
+#include <string.h>
+
+static void reset_effect(void) {
+	memset(VRAM_ADDR, 2, 0x1b00);
+	sleep(1);
+	memset(VRAM_ADDR, 0, 0x1800);
+}
 
 u8 call_glitch(void)
 {
@@ -42,6 +50,8 @@ void glitch_fill()
 		texture_draw(&texture_glitch, x, y);
 		audio_play_sync(audio_text_beep);
 	}
+	glitch_voice_next();
+	reset_effect();
 }
 
 static const u8 *voice;
