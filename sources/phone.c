@@ -8,6 +8,7 @@
 #include "text.h"
 #include "calls.h"
 #include "runtime.h"
+#include "audio.h"
 #include <string.h>
 
 #define phone_number_x 		12
@@ -80,7 +81,7 @@ u8 read_digit() {
 		digit = poll_digit();
 	}
 	while(digit == 0xff);
-	while(poll_digit() != 0xff);
+	audio_play_dtmf(digit, 10);
 	return digit;
 }
 
@@ -88,6 +89,24 @@ static void clear_number() {
 	number_size = 0;
 	memset(number, 0xff, sizeof(number));
 	number_pos = phone_number_x;
+}
+
+static void phone_draw_number(void)
+{
+	u8 number_pos = phone_number_x;
+	for(u8 i = 0; i < 4; ++i)
+	{
+		u8 digit = number[i];
+		font_draw_char(digit + '0' - CHAR_MIN, number_pos, phone_number_y);
+		number_pos += phone_number_step;
+	}
+}
+
+static void phone_call_dial_effect()
+{
+       audio_play_dtmf(19, 20);
+       phone_draw_number();
+       sleep(15);
 }
 
 void phone_call(void)
@@ -102,6 +121,8 @@ void phone_call(void)
 		font_draw_char(digit + '0' - CHAR_MIN, number_pos, phone_number_y);
 		number_pos += phone_number_step;
 	}
+	phone_call_dial_effect();
+	phone_call_dial_effect();
 }
 
 struct Number {
