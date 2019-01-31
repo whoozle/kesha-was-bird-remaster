@@ -32,6 +32,24 @@ u8 call_glitch(void)
 		return 0;
 }
 
+static const u8 *voice;
+
+void glitch_voice_next()
+{
+	u8 n = 60;
+	while(n--)
+	{
+		audio_play_sync(voice);
+		voice += 16;
+	}
+}
+
+void glitch_voice()
+{
+	voice = 0; //play ZX ROM
+	glitch_voice_next();
+}
+
 static Texture texture_glitch = { 8, 8, 0, 0 };
 
 void glitch_fill()
@@ -52,22 +70,4 @@ void glitch_fill()
 	}
 	glitch_voice_next();
 	reset_effect();
-}
-
-static const u8 *voice;
-
-void glitch_voice_next()
-{
-	u8 n = 60;
-	while(n--)
-	{
-		audio_play_sync(voice);
-		voice += 16;
-	}
-}
-
-void glitch_voice()
-{
-	voice = 0; //play ZX ROM
-	glitch_voice_next();
 }

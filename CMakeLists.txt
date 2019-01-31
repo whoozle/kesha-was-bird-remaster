@@ -129,6 +129,7 @@ generate_dtmf()
 
 set(SOURCES
 	sources/main.c
+	sources/credits.c
 	sources/init.s
 	sources/runtime.c
 	sources/audio.c

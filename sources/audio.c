@@ -36,9 +36,9 @@ static void audio_play_sync_impl(const u8 *audio, u8 disco)
 void audio_play_sync(const u8 *audio)
 { audio_play_sync_impl(audio, 0); }
 
-void audio_play_music(const u16 *indices, const u8 *data)
+void audio_play_music(const u16 *indices, const u8 *data, u8 loop)
 {
-	while(1)
+	do
 	{
 		u16 index = 0;
 		while(1)
@@ -52,6 +52,7 @@ void audio_play_music(const u16 *indices, const u8 *data)
 				return;
 		}
 	}
+	while(loop);
 }
 
 extern u8 audio_phone_tones[20][16];

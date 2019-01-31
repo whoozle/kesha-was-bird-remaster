@@ -18,7 +18,7 @@ void day_next() {
 void day_1(void)
 {
 	text_draw_ns(18, 56, text_splash_title);
-	audio_play_music(audio_theme_index, audio_theme_data);
+	audio_play_music(audio_theme_index, audio_theme_data, 1);
 
 	border(0);
 	fb_clear_attrs(0);
