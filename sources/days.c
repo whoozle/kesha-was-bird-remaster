@@ -19,6 +19,10 @@ void day_1(void)
 {
 	audio_play_music(audio_theme_index, audio_theme_data);
 
+	border(0);
+	fb_clear_attrs(0);
+	fb_clear_pixels(0);
+
 	fb_clear(7);
 	sleep(100);
 	text_draw(31, 30, text_title);

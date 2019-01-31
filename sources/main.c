@@ -9,8 +9,6 @@ void main(void)
 {
 	gsinit();
 
-	//splash + music here
-
 	day_1();
 	day_2();
 	while(1)

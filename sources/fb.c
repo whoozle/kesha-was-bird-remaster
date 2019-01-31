@@ -119,3 +119,8 @@ void fb_clear_attrs(u8 bg)
 {
 	memset(VRAM_ATTRS, bg, 0x300);
 }
+
+void fb_clear_pixels(u8 value)
+{
+	memset(VRAM_ADDR, value, 0x1800);
+}
