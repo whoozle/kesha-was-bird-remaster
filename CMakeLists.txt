@@ -74,6 +74,14 @@ macro(generate_dtmf)
 	)
 endmacro()
 
+list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/screen_splash.s)
+add_custom_command(
+	OUTPUT ${GENERATED_ROOT}/screen_splash.s
+	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${CMAKE_CURRENT_SOURCE_DIR}/assets/splash.png splash -f screen -p 7 0 2 0 -t 8
+	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py
+	WORKING_DIRECTORY ${GENERATED_ROOT}
+)
+
 generate_texture(NAME drinking			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/drinking.png OPTIONS -c PALETTE 0 1 5 1)
 generate_texture(NAME earth_1			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth.png	OPTIONS -c PALETTE 0 6 5 7)
 generate_texture(NAME earth_2			SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/big_pics/earth_2.png	OPTIONS -c PALETTE 0 6 5 7)
@@ -118,14 +126,6 @@ generate_text(SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/assets/en.json ${GENERATED_ROO
 generate_audio(SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds/track3.wav NAME theme OPTIONS -l10)
 
 generate_dtmf()
-
-list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/screen_splash.s)
-add_custom_command(
-	OUTPUT ${GENERATED_ROOT}/screen_splash.s
-	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py ${CMAKE_CURRENT_SOURCE_DIR}/assets/splash.png splash -f screen -p 1 2 3 4 -t 8
-	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-texture.py
-	WORKING_DIRECTORY ${GENERATED_ROOT}
-)
 
 set(SOURCES
 	sources/main.c

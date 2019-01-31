@@ -152,14 +152,21 @@ elif args.format == 'screen':
 	assert w == 256
 	assert h <= maxh
 	dy = (maxh - h) >> 4 << 3
-	screen = bytearray([7] * (0x1800 + 0x300))
+	screen = bytearray([0] * (0x1800 + 0x300))
 	source = []
 	for y in xrange(dy, dy + h):
+		srcy = (y - dy) << 5
 		y0 = y & 7
 		y1 = (y >> 3) & 7
-		y2 = y >> 7
+		y2 = y >> 6
 		dsty = (y2 << 11) | (y0 << 8) | (y1 << 5)
-		#screen[dsty: dsty + 32] = data[y * 32: y * 32 + 32]
+		screen[dsty: dsty + 32] = data[srcy: srcy + 32]
+
+	dy >>= 3
+	for y in xrange(dy, dy + (h >> 3)):
+		for x in xrange(32):
+			a = attrs[(y - dy) * 32 + x]
+			screen[0x1800 + y * 32 + x] = a
 
 	source.append("; %d + %d bytes" %(len(data), len(attrs)))
 	for b in screen:
