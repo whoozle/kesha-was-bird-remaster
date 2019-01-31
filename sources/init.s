@@ -29,13 +29,8 @@ gsinit_next$:
 	ei
 	ret
 
-_sleep::
-	ld hl, #2
-	add hl, sp
-	ld b, (hl)
-_sleep$:
+_halt::
 	halt
-	djnz _sleep$
 	ret
 
 _get_r::

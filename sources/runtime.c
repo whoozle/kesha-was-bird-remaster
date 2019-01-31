@@ -1,4 +1,5 @@
 #include "runtime.h"
+#include "keyboard.h"
 
 static u8 _last_value;
 static __sfr __at 0xfe PortFE;
@@ -28,4 +29,13 @@ u16 rand()
     _rand ^= _rand >> 9;
     _rand ^= _rand << 8;
 	return _rand;
+}
+
+void sleep(u8 frames)
+{
+	u8 keys = Keyboard_BNMSymSpace;
+	if (!(keys & 1))
+		return;
+	while(frames--)
+		halt();
 }
