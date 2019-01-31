@@ -162,6 +162,8 @@ elif args.format == 'screen':
 		dsty = (y2 << 11) | (y0 << 8) | (y1 << 5)
 		screen[dsty: dsty + 32] = data[srcy: srcy + 32]
 
+	for i in xrange(0x300):
+		screen[0x1800 + i] = (palette[0] << 3) | palette[0]
 	dy >>= 3
 	for y in xrange(dy, dy + (h >> 3)):
 		for x in xrange(32):
