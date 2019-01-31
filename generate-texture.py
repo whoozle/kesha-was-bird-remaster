@@ -8,7 +8,7 @@ import random
 parser = argparse.ArgumentParser(description='Compile font.')
 parser.add_argument('source', help='input file')
 parser.add_argument('name', help='name')
-parser.add_argument('--background', '-b', help='background-color', default=0, type=int)
+parser.add_argument('--ink', '-i', help='default foreground color', default=0, type=int)
 parser.add_argument('--compress', '-c', action='store_true', help='compress bitmap with lz4 algorithm')
 parser.add_argument('--algorithm', '-A', type=str, help='select algo', default='lz4')
 parser.add_argument('--palette', '-p', nargs='+', help='palette')
@@ -63,7 +63,7 @@ for ty in xrange(ny):
 			attr = (palette[bg] << 3) | palette[fg]
 		else:
 			bg, fg, fg2 = stats[0][0], 99, 99
-			attr = (palette[bg] << 3)
+			attr = (palette[bg] << 3 | args.ink)
 
 		if args.monochrome:
 			for yb in xrange(th):
