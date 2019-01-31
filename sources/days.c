@@ -1,6 +1,6 @@
 #include "days.h"
 #include "tiles.h"
-#include "font_font.h"
+#include "font.h"
 #include "fb.h"
 #include "_dialogs.h"
 #include "text.h"
@@ -17,6 +17,7 @@ void day_next() {
 
 void day_1(void)
 {
+	text_draw_ns(18, 56, text_splash_title);
 	audio_play_music(audio_theme_index, audio_theme_data);
 
 	border(0);
