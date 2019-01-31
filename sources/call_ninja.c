@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "fb.h"
 #include "font.h"
+#include "credits.h"
 #include "_dialogs.h"
 #include <string.h>
 
@@ -191,7 +192,5 @@ void ninja_fight(void)
 		audio_play_sync(audio_text_beep);
 	}
 
-	//credits
-	while(1)
-		sleep(50);
+	credits();
 }
