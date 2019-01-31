@@ -13,13 +13,15 @@ parser.add_argument('--compress', '-c', action='store_true', help='compress bitm
 parser.add_argument('--algorithm', '-A', type=str, help='select algo', default='lz4')
 parser.add_argument('--palette', '-p', nargs='+', help='palette')
 parser.add_argument('--monochrome', '-m', action='store_true', help='do not generate attrs')
+parser.add_argument('--format', '-f', type=str, help='output format', choices=['c', 'screen'], default='c')
+parser.add_argument('--tile-size', '-t', type=int, help='attr tile size', default=4)
 args = parser.parse_args()
 
 tex = png.Reader(args.source)
 w, h, pixels, metadata = tex.read_flat()
 w = ((w + 7) >> 3) << 3
 
-tw, th = 4, 4
+tw, th = args.tile_size, args.tile_size
 nx = (w + tw - 1) // tw
 ny = (h + th - 1) // th
 data = bytearray([0] * ((tw * th * nx * ny) >> 3))
@@ -35,7 +37,6 @@ def get_pixel(x, y):
 	return pixels[y * w + x]
 
 def set_pixel(x, y):
-	assert y < 64
 	bit = x & 7
 	addr = (y * (w >> 3)) + (x >> 3)
 	data[addr] |= 0x80 >> bit
@@ -125,22 +126,51 @@ if args.compress:
 	compression = args.algorithm
 
 data, attrs, compressed = compress(data, attrs, compression)
-hexdata = ", ".join(map(hex, data))
-source.append("static const u8 data[] = {%s};" %(hexdata))
-if attrs:
-	hexdata = ", ".join(map(hex, attrs))
-	source.append("static const u8 attrs[] = {%s};" %(hexdata))
 
-header.append('')
-header.append("#endif")
+if args.format == 'c':
+	hexdata = ", ".join(map(hex, data))
+	source.append("static const u8 data[] = {%s};" %(hexdata))
+	if attrs:
+		hexdata = ", ".join(map(hex, attrs))
+		source.append("static const u8 attrs[] = {%s};" %(hexdata))
 
-header.append('')
-source.append('')
-source.append('const Texture texture_%s = { %d, %d, data, %s, %d, %d };' %(args.name, w, h, "attrs" if attrs else 0, palette[0], 1 if compressed else 0 ))
-source.append('')
+	header.append('')
+	header.append("#endif")
 
-with open("texture_%s.h" %args.name, "wt") as f:
-	f.write("\n".join(header))
+	header.append('')
+	source.append('')
+	source.append('const Texture texture_%s = { %d, %d, data, %s, %d, %d };' %(args.name, w, h, "attrs" if attrs else 0, palette[0], 1 if compressed else 0 ))
+	source.append('')
 
-with open("texture_%s.c" %args.name, "wt") as f:
-	f.write("\n".join(source))
+	with open("texture_%s.h" %args.name, "wt") as f:
+		f.write("\n".join(header))
+
+	with open("texture_%s.c" %args.name, "wt") as f:
+		f.write("\n".join(source))
+elif args.format == 'screen':
+	maxh = 192
+	assert w == 256
+	assert h <= maxh
+	dy = (maxh - h) >> 4 << 3
+	screen = bytearray([7] * (0x1800 + 0x300))
+	source = []
+	for y in xrange(dy, dy + h):
+		y0 = y & 7
+		y1 = (y >> 3) & 7
+		y2 = y >> 7
+		dsty = (y2 << 11) | (y0 << 8) | (y1 << 5)
+		#screen[dsty: dsty + 32] = data[y * 32: y * 32 + 32]
+
+	source.append("; %d + %d bytes" %(len(data), len(attrs)))
+	for b in screen:
+		source.append(".db %d" %b)
+
+	with open("screen_%s.s" %args.name, "wt") as f:
+		f.write("""\
+.module screen
+.area CODE (ABS)
+.org 0H4000
+
+""" + "\n".join(source))
+else:
+	raise Exception('unsupported format %s' %args.format)
