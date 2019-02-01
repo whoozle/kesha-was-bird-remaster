@@ -3,8 +3,6 @@
 #include "days.h"
 #include "phone.h"
 
-void ninja_fight();
-
 void main(void)
 {
 	gsinit();
