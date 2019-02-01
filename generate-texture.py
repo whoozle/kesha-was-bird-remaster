@@ -71,7 +71,7 @@ for ty in xrange(ny):
 				for xb in xrange(tw):
 					x = basex + xb
 					v = get_pixel(x, y)
-					if fg == v or (fg2 == v and ((x + y) & 1)):
+					if v != bg:
 						set_pixel(x, y)
 		else:
 			attrs[ty * nx + tx] = attr
