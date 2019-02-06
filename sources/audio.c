@@ -36,6 +36,9 @@ static void audio_play_sync_impl(const u8 *audio, u8 disco)
 void audio_play_sync(const u8 *audio)
 { audio_play_sync_impl(audio, 0); }
 
+void audio_play_sync_n(const u8 *audio, u8 n)
+{ while(n--) audio_play_sync(audio); }
+
 void audio_play_music(const u16 *indices, const u8 *data, u8 loop)
 {
 	do

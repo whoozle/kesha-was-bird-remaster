@@ -4,6 +4,7 @@
 #include "types.h"
 
 void audio_play_sync(const u8 *audio);
+void audio_play_sync_n(const u8 *audio, u8 n);
 void audio_invalid_number(void);
 void audio_play_music(const u16 *indices, const u8 *data, u8 loop);
 void audio_play_dtmf(u8 index, u8 n);

@@ -3,9 +3,13 @@
 #include "days.h"
 #include "phone.h"
 
+void call_lab(void);
+
 void main(void)
 {
 	gsinit();
+	call_lab();
+	while(1);
 
 	day_1();
 	day_2();
