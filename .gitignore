@@ -6,3 +6,4 @@ game.8o
 .compiled/
 assets/sources
 build/
+.vscode
