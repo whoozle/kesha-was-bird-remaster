@@ -68,7 +68,7 @@ void fb_update_rect_attrs(u8 ax, u8 ay, u8 aw, u8 ah)
 
 //update source (!) width in bytes (0-16) (128 original resolution, 8 pixel per byte)
 //update source (!) height
-void fb_update_rect_impl(u8 *base, const u8 *src, u8 updateWidth, u8 updateHeight)
+static void fb_update_rect_impl(u8 *base, const u8 *src, u8 updateWidth, u8 updateHeight)
 {
 	u8 srcPitch = 16 - updateWidth;
 	while(updateHeight--)
