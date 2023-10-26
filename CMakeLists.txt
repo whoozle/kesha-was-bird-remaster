@@ -58,7 +58,7 @@ macro(generate_audio)
 	cmake_parse_arguments(_GT "" "NAME;SOURCE" "OPTIONS" ${ARGN})
 	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/audio_${_GT_NAME}.c)
 	add_custom_command(OUTPUT ${GENERATED_ROOT}/audio_${_GT_NAME}.c ${GENERATED_ROOT}/audio_${_GT_NAME}.h
-		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-audio.py ${_GT_SOURCE} ${_GT_NAME} ${GENERATED_ROOT} ${_GT_OPTIONS}
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-audio.py -c 0.2 ${_GT_SOURCE} ${_GT_NAME} ${GENERATED_ROOT} ${_GT_OPTIONS}
 		WORKING_DIRECTORY ${GENERATED_ROOT}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-audio.py ${_GT_SOURCE}
 	)
