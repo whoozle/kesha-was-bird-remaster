@@ -28,7 +28,7 @@ const unsigned char * lz4_unpack(unsigned char *dst, const unsigned char *src)
 		}
 
 		u16 offset = *src++;
-		offset |= *src++ << 8;
+		offset |= ((u16)*src++) << 8;
 
 		size = 4 + (code & 0x0f);
 		if (size == 19)
