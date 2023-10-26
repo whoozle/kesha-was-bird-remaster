@@ -3,9 +3,8 @@
 
 const unsigned char * lz4_unpack(unsigned char *dst, const unsigned char *src)
 {
-	u16 usize = *src++;
-	usize |= *src++ << 8;
-	src += 2;
+	u16 usize = *(const u16 *)src;
+	src += 4;
 	const unsigned char *end = dst + usize;
 	while(dst < end) {
 		u8 code = *src++;
