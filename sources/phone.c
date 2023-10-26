@@ -19,7 +19,7 @@ static u8 number[4];
 static u8 number_size = 0;
 static u8 number_pos = phone_number_x;
 
-static void notepad_draw()
+static void notepad_draw(void)
 {
 	u8 x = 64, y = 10;
 	text_draw_ns(x, y, text_note_galya);
@@ -41,7 +41,7 @@ static void notepad_draw()
 	}
 }
 
-u8 poll_digit()
+u8 poll_digit(void)
 {
 	u8 byte = Keyboard_54321 & 0x1fu;
 	if (byte != 0x1fu)
@@ -74,7 +74,7 @@ u8 poll_digit()
 	return 0xffu;
 }
 
-u8 read_digit() {
+u8 read_digit(void) {
 	u8 digit;
 	do
 	{
@@ -85,7 +85,7 @@ u8 read_digit() {
 	return digit;
 }
 
-static void clear_number() {
+static void clear_number(void) {
 	number_size = 0;
 	memset(number, 0xff, sizeof(number));
 	number_pos = phone_number_x;
@@ -102,7 +102,7 @@ static void phone_draw_number(void)
 	}
 }
 
-static void phone_call_dial_effect()
+static void phone_call_dial_effect(void)
 {
        audio_play_dtmf(19, 20);
        phone_draw_number();
@@ -127,7 +127,7 @@ void phone_call(void)
 
 struct Number {
 	u8 number[4];
-	void (*handler)();
+	void (*handler)(void);
 };
 typedef struct Number Number;
 

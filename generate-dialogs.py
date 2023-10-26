@@ -47,7 +47,7 @@ def head(idx, name):
 		key = (idx, name)
 		if key not in _draw_heads:
 			_heads_source += """\
-static void heads_draw_{name}_{idx}()
+static void heads_draw_{name}_{idx}(void)
 {{ texture_draw(&texture_head_{name}, dialog_head_{idx}_x, dialog_head_{idx}_y); }}\n""".format(name = name, idx = idx)
 			_draw_heads.add(key)
 	if _heads[idx]:

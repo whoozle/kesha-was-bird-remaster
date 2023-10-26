@@ -10,7 +10,7 @@
 
 static u8 day_number[3] = { 0, 0, 1 };
 
-void day_next() {
+void day_next(void) {
 	day_increment();
 	day_intertitle();
 }

@@ -71,7 +71,7 @@ static void frame(Texture * bg)
 	sleep(50);
 }
 
-void shake_up_down()
+void shake_up_down(void)
 {
 	u8 n = 60;
 	while(n--)
@@ -83,7 +83,7 @@ void shake_up_down()
 	}
 }
 
-void shake_left_right()
+void shake_left_right(void)
 {
 	u8 n = 40;
 	while(n--)

@@ -18,12 +18,12 @@ void speaker(u8 bit)
 
 static u16 _rand = 0xACE1u;
 
-void srand_r()
+void srand_r(void)
 {
 	_rand += get_r();
 }
 
-u16 rand()
+u16 rand(void)
 {
     _rand ^= _rand << 7;
     _rand ^= _rand >> 9;

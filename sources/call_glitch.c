@@ -34,7 +34,7 @@ u8 call_glitch(void)
 
 static const u8 *voice;
 
-void glitch_voice_next()
+void glitch_voice_next(void)
 {
 	u8 n = 60;
 	while(n--)
@@ -44,7 +44,7 @@ void glitch_voice_next()
 	}
 }
 
-void glitch_voice()
+void glitch_voice(void)
 {
 	voice = 0; //play ZX ROM
 	glitch_voice_next();
@@ -52,7 +52,7 @@ void glitch_voice()
 
 static Texture texture_glitch = { 8, 8, 0, 0 };
 
-void glitch_fill()
+void glitch_fill(void)
 {
 	u8 n = 90;
 	while(n--)
