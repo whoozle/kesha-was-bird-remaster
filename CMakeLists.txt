@@ -69,7 +69,7 @@ macro(generate_dtmf)
 	list(APPEND GENERATED_SOURCES ${GENERATED_ROOT}/audio_dtmf.c)
 	add_custom_command(
 		OUTPUT ${GENERATED_ROOT}/audio_dtmf.c
-		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-dtmf.py > ${GENERATED_ROOT}/audio_dtmf.c
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate-dtmf.py -c 0.5 > ${GENERATED_ROOT}/audio_dtmf.c
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/generate-dtmf.py
 	)
 endmacro()

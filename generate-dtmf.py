@@ -1,7 +1,12 @@
 #!/usr/bin/env python2
 
 FREQ = 4000
-from math import sin, pi, floor
+from math import sin, pi
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description="Generate DTFM waveforms.")
+parser.add_argument('-c', '--cutoff', help = 'cutoff value', default=0.0, type=float)
+args = parser.parse_args()
 
 def osc(t, freq):
 	return sin(t * 2 * pi * freq)
@@ -35,15 +40,11 @@ def generate(tone):
 	data = []
 	byte = 0
 	bit = 0
-	qe = 0
+	activation = args.cutoff
 	for i in xrange(0, 128):
 		x = tone[i]
-		if x >= qe:
+		if x >= activation:
 			byte |= (0x80 >> bit)
-			y = 1
-		else:
-			y = -1
-		qe = y - x + qe
 
 		bit += 1
 		if bit == 8:
